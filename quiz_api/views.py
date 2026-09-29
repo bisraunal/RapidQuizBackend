@@ -87,9 +87,16 @@ class QuizSubmitView(APIView):
             if not question:
                 continue
 
-            # Find correct choice
-            correct_choice = next((c for c in question.choices.all() if c.is_correct), None)
+            # Find correct choice and selected choice
+            choices_list = list(question.choices.all())
+            correct_choice = next((c for c in choices_list if c.is_correct), None)
             correct_choice_id = str(correct_choice.id) if correct_choice else None
+            correct_choice_text = correct_choice.text if correct_choice else ""
+
+            selected_choice = None
+            if selected_choice_id:
+                selected_choice = next((c for c in choices_list if str(c.id) == str(selected_choice_id)), None)
+            selected_choice_text = selected_choice.text if selected_choice else None
 
             is_correct = False
             earned_points = 0
@@ -109,8 +116,12 @@ class QuizSubmitView(APIView):
 
             results_breakdown.append({
                 "question_id": str(q_id),
+                "question_text": question.text,
+                "code_snippet": question.code_snippet,
                 "selected_choice_id": str(selected_choice_id) if selected_choice_id else None,
+                "selected_choice_text": selected_choice_text,
                 "correct_choice_id": correct_choice_id,
+                "correct_choice_text": correct_choice_text,
                 "is_correct": is_correct,
                 "time_taken": time_taken,
                 "earned_points": earned_points,
