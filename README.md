@@ -1,4 +1,4 @@
-# ⚡ Rapid Quiz — Backend API
+# Rapid Quiz — Backend API
 
 <div align="center">
 
@@ -16,26 +16,26 @@
 
 ---
 
-## 📖 Genel Bakış (Overview)
+## Genel Bakış (Overview)
 
 Rapid Quiz Backend, mobil ve web istemcilerine yüksek performanslı, güvenli ve hile korumalı REST API hizmeti sunan Headless Django mimarisidir.
 
-### ✨ Öne Çıkan Özellikler
-* 🛡️ **Hile Korumalı Soru Teslimi:** Quiz esnasında doğru şıklar (`is_correct`) istemciye gönderilmez. Doğrulama sunucu tarafında yapılır.
-* ⚡ **Dinamik Hız Bonusu Formülü:** Taban 10 puana ek olarak kalan süreye göre anlık hız puanı hesaplama (`Puan = 10 + (Kalan Süre * 2)`).
-* 🏆 **Canlı Lider Tablosu (Top 10):** Kategori bazlı ve global lider tabloları.
-* 📚 **Eğitici Sonuç Analizi:** Quiz bitiminde detaylı doğru/yanlış ve süre analizi dökümü.
-* 📦 **6 Kategori & 120 Soru (Seed Data):** Yazılım, Yapay Zeka, Bilgisayar Mühendisliği, Ülkeler, Fizik ve Futbol.
+### Temel Özellikler
+* **Hile Korumalı Soru Teslimi:** Quiz esnasında doğru şıklar (`is_correct`) istemciye gönderilmez. Doğrulama sunucu tarafında yapılır.
+* **Dinamik Hız Bonusu Formülü:** Taban 10 puana ek olarak kalan süreye göre anlık hız puanı hesaplama (`Puan = 10 + (Kalan Süre * 2)`).
+* **Canlı Lider Tablosu (Top 10):** Kategori bazlı ve global lider tabloları.
+* **Eğitici Sonuç Analizi:** Quiz bitiminde detaylı doğru/yanlış ve süre analizi dökümü.
+* **6 Kategori ve 120 Soru (Seed Data):** Yazılım, Yapay Zeka, Bilgisayar Mühendisliği, Ülkeler, Fizik ve Futbol.
 
 ---
 
-## 🏛️ Sistem Mimarisi
+## Sistem Mimarisi
 
 ```mermaid
 flowchart TD
-    Client["🌐 Web / Mobil İstemci"] -->|JSON / HTTPS| DRF["Django REST Framework API"]
+    Client["Web / Mobil İstemci"] -->|JSON / HTTPS| DRF["Django REST Framework API"]
     DRF -->|ORM| Models["Veritabanı Modelleri"]
-    Models --> PG[("🐘 PostgreSQL / SQLite DB")]
+    Models --> PG[("PostgreSQL / SQLite DB")]
     
     subgraph Core ["Rapid Quiz API Çekirdeği"]
         DRF --> Auth["CORS & Güvenlik"]
@@ -46,7 +46,7 @@ flowchart TD
 
 ---
 
-## 🔌 API Uç Noktaları (Endpoints)
+## API Uç Noktaları (Endpoints)
 
 | Metot | Uç Nokta | Açıklama |
 | :--- | :--- | :--- |
@@ -58,7 +58,7 @@ flowchart TD
 
 ---
 
-## 🚀 Yerel Geliştirme (Local Setup)
+## Yerel Geliştirme (Local Setup)
 
 ### 1. Bağımlılıkları Yükleyin
 ```bash
@@ -85,7 +85,7 @@ python manage.py test
 
 ---
 
-## 🐳 Docker ile Çalıştırma
+## Docker ile Çalıştırma
 
 ```bash
 docker-compose up --build
