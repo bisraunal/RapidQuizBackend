@@ -1156,7 +1156,7 @@ CATEGORIES_DATA = [
                 "points": 10,
                 "order": 1,
                 "choices": [
-                    {"text": "Brezilya (5 Kez)", "is_correct": True},
+                    {"text": "Brezilya", "is_correct": True},
                     {"text": "Almanya", "is_correct": False},
                     {"text": "İtalya", "is_correct": False},
                     {"text": "Arjantin", "is_correct": False},
