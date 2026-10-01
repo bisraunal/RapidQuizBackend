@@ -8,6 +8,8 @@ class Category(models.Model):
     slug = models.SlugField(max_length=100, unique=True, verbose_name="Kategori Slug")
     icon = models.CharField(max_length=50, default="HelpCircle", verbose_name="Lucide İkon Adı")
     color_theme = models.CharField(max_length=50, default="cyan", verbose_name="Renk Teması")
+    music_url = models.URLField(max_length=500, blank=True, null=True, verbose_name="Arka Plan Müziği URL'si")
+    music_title = models.CharField(max_length=100, blank=True, null=True, verbose_name="Müzik Başlığı")
     is_active = models.BooleanField(default=True, verbose_name="Aktif mi?")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Oluşturulma Tarihi")
 

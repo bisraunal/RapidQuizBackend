@@ -3,13 +3,14 @@ from django.core.management.base import BaseCommand
 from django.db import transaction
 from quiz_api.models import Category, Question, Choice
 
-
 CATEGORIES_DATA = [
     {
         "name": "Yazılım",
         "slug": "yazilim",
         "icon": "Code2",
         "color_theme": "cyan",
+        "music_url": "https://assets.mixkit.co/music/preview/mixkit-cyber-city-110.mp3",
+        "music_title": "Cyber City - Synthwave Code Beat",
         "questions": [
             {
                 "text": "Python dilinde değiştirilemez (immutable) veri tipi hangisidir?",
@@ -19,8 +20,8 @@ CATEGORIES_DATA = [
                     {"text": "Tuple", "is_correct": True},
                     {"text": "List", "is_correct": False},
                     {"text": "Dictionary", "is_correct": False},
-                    {"text": "Set", "is_correct": False},
-                ],
+                    {"text": "Set", "is_correct": False}
+                ]
             },
             {
                 "text": "JavaScript'te '===' operatörünün '==' den farkı nedir?",
@@ -30,8 +31,8 @@ CATEGORIES_DATA = [
                     {"text": "Değer ile birlikte veri tipini de kontrol eder", "is_correct": True},
                     {"text": "Sadece string ifadeleri karşılaştırır", "is_correct": False},
                     {"text": "Tipleri otomatik olarak birbirine dönüştürür", "is_correct": False},
-                    {"text": "Referans adreslerini karşılaştırmaz", "is_correct": False},
-                ],
+                    {"text": "Referans adreslerini karşılaştırmaz", "is_correct": False}
+                ]
             },
             {
                 "text": "Git'te yerel değişiklikleri commit yapmadan geçici olarak saklamak için hangi komut kullanılır?",
@@ -41,8 +42,8 @@ CATEGORIES_DATA = [
                     {"text": "git stash", "is_correct": True},
                     {"text": "git save", "is_correct": False},
                     {"text": "git cache", "is_correct": False},
-                    {"text": "git pause", "is_correct": False},
-                ],
+                    {"text": "git pause", "is_correct": False}
+                ]
             },
             {
                 "text": "REST mimarisinde bir kaynağı tamamen güncellemek için kullanılan standart idempotent HTTP metodu hangisidir?",
@@ -52,8 +53,8 @@ CATEGORIES_DATA = [
                     {"text": "PUT", "is_correct": True},
                     {"text": "POST", "is_correct": False},
                     {"text": "PATCH", "is_correct": False},
-                    {"text": "CONNECT", "is_correct": False},
-                ],
+                    {"text": "CONNECT", "is_correct": False}
+                ]
             },
             {
                 "text": "Nesne Yönelimli Programlamada (OOP) bir sınıfın başka bir sınıfın özellik ve metotlarını devralması ne olarak adlandırılır?",
@@ -63,8 +64,8 @@ CATEGORIES_DATA = [
                     {"text": "Inheritance (Kalıtım)", "is_correct": True},
                     {"text": "Polymorphism (Çok Biçimlilik)", "is_correct": False},
                     {"text": "Encapsulation (Kapsülleme)", "is_correct": False},
-                    {"text": "Abstraction (Soyutlama)", "is_correct": False},
-                ],
+                    {"text": "Abstraction (Soyutlama)", "is_correct": False}
+                ]
             },
             {
                 "text": "SQL'de tablodan çekilen verilerdeki tekrar eden kayıtları tekilleştirmek için hangi anahtar kelime kullanılır?",
@@ -74,8 +75,8 @@ CATEGORIES_DATA = [
                     {"text": "DISTINCT", "is_correct": True},
                     {"text": "UNIQUE", "is_correct": False},
                     {"text": "GROUP", "is_correct": False},
-                    {"text": "SINGLE", "is_correct": False},
-                ],
+                    {"text": "SINGLE", "is_correct": False}
+                ]
             },
             {
                 "text": "CSS Flexbox yapısında elemanları ana eksende (main-axis) ortalamak için hangi özellik kullanılır?",
@@ -85,8 +86,8 @@ CATEGORIES_DATA = [
                     {"text": "justify-content: center;", "is_correct": True},
                     {"text": "align-items: center;", "is_correct": False},
                     {"text": "text-align: center;", "is_correct": False},
-                    {"text": "flex-direction: center;", "is_correct": False},
-                ],
+                    {"text": "flex-direction: center;", "is_correct": False}
+                ]
             },
             {
                 "text": "Web tarayıcılarında istemci depolaması için kullanılan ve tarayıcı sekmesi kapatıldığında silinen yapı hangisidir?",
@@ -96,1258 +97,1268 @@ CATEGORIES_DATA = [
                     {"text": "sessionStorage", "is_correct": True},
                     {"text": "localStorage", "is_correct": False},
                     {"text": "IndexedDB", "is_correct": False},
-                    {"text": "Cookies", "is_correct": False},
-                ],
+                    {"text": "Cookies", "is_correct": False}
+                ]
             },
             {
-                "text": "Hangi veri yapısı LIFO (Last In First Out - Son Giren İlk Çıkar) prensibine göre çalışır?",
+                "text": "Hangisi bir NoSQL veritabanı türü olan 'Doküman Tabanlı' (Document Store) veritabanıdır?",
                 "points": 10,
                 "order": 9,
                 "choices": [
-                    {"text": "Stack (Yığıt)", "is_correct": True},
-                    {"text": "Queue (Kuyruk)", "is_correct": False},
-                    {"text": "LinkedList (Bağlı Liste)", "is_correct": False},
-                    {"text": "Tree (Ağaç)", "is_correct": False},
-                ],
+                    {"text": "MongoDB", "is_correct": True},
+                    {"text": "PostgreSQL", "is_correct": False},
+                    {"text": "Redis", "is_correct": False},
+                    {"text": "Neo4j", "is_correct": False}
+                ]
             },
             {
-                "text": "Docker container imajlarının katmanlarını ve yapılandırmasını tanımlayan temel dosya nedir?",
+                "text": "Docker'da çalışan bir konteyneri arka planda (detached mode) başlatmak için hangi parametre kullanılır?",
                 "points": 10,
                 "order": 10,
                 "choices": [
-                    {"text": "Dockerfile", "is_correct": True},
-                    {"text": "docker-compose.yml", "is_correct": False},
-                    {"text": "container.json", "is_correct": False},
-                    {"text": "manifest.yaml", "is_correct": False},
-                ],
+                    {"text": "-d", "is_correct": True},
+                    {"text": "-b", "is_correct": False},
+                    {"text": "-it", "is_correct": False},
+                    {"text": "--daemon", "is_correct": False}
+                ]
             },
             {
-                "text": "JSON veri formatında diziler (array) hangi parantez karakteri ile tanımlanır?",
+                "text": "Python'da liste üreteci (List Comprehension) kullanarak [0, 2, 4, 6, 8] listesini oluşturan ifade hangisidir?",
                 "points": 10,
                 "order": 11,
                 "choices": [
-                    {"text": "Köşeli Parantez [ ]", "is_correct": True},
-                    {"text": "Süslü Parantez { }", "is_correct": False},
-                    {"text": "Yay Ayraç ( )", "is_correct": False},
-                    {"text": "Açılı Ayraç < >", "is_correct": False},
-                ],
+                    {"text": "[x for x in range(10) if x % 2 == 0]", "is_correct": True},
+                    {"text": "[x * 2 for x in range(10)]", "is_correct": False},
+                    {"text": "[x in range(10) if x % 2 == 0]", "is_correct": False},
+                    {"text": "list(range(0, 10, 1))", "is_correct": False}
+                ]
             },
             {
-                "text": "TypeScript, JavaScript ekosistemine temelde hangi kritik yeteneği kazandırır?",
+                "text": "JavaScript'te asenkron işlemleri yönetmek için Promise yapısına alternatif olarak ES8 ile gelen sözdizimi nedir?",
                 "points": 10,
                 "order": 12,
                 "choices": [
-                    {"text": "Statik Tip Denetimi (Static Typing)", "is_correct": True},
-                    {"text": "Dahili CSS Derleyicisi", "is_correct": False},
-                    {"text": "Doğrudan Veritabanı Bağlantısı", "is_correct": False},
-                    {"text": "İşletim Sistemi Çekirdek Erişimi", "is_correct": False},
-                ],
+                    {"text": "async / await", "is_correct": True},
+                    {"text": "try / catch", "is_correct": False},
+                    {"text": "defer / resolve", "is_correct": False},
+                    {"text": "yield / generator", "is_correct": False}
+                ]
             },
             {
-                "text": "Bir fonksiyonun kendi kendini doğrudan veya dolaylı olarak çağırması mekanizmasına ne ad verilir?",
+                "text": "Linux işletim sisteminde bir dosyanın izinlerini değiştirmek için hangi komut kullanılır?",
                 "points": 10,
                 "order": 13,
                 "choices": [
-                    {"text": "Recursion (Özyineleme)", "is_correct": True},
-                    {"text": "Iteration (Yineleme)", "is_correct": False},
-                    {"text": "Memoization", "is_correct": False},
-                    {"text": "Currying", "is_correct": False},
-                ],
+                    {"text": "chmod", "is_correct": True},
+                    {"text": "chown", "is_correct": False},
+                    {"text": "ls -l", "is_correct": False},
+                    {"text": "sudo perm", "is_correct": False}
+                ]
             },
             {
-                "text": "Linux işletim sisteminde dosya veya dizin erişim izinlerini (read/write/execute) değiştiren komut hangisidir?",
+                "text": "Yazılım tasarımında SOLID prensiplerinin 'S' harfi neyi temsil eder?",
                 "points": 10,
                 "order": 14,
                 "choices": [
-                    {"text": "chmod", "is_correct": True},
-                    {"text": "chown", "is_correct": False},
-                    {"text": "chgrp", "is_correct": False},
-                    {"text": "touch", "is_correct": False},
-                ],
+                    {"text": "Single Responsibility Principle", "is_correct": True},
+                    {"text": "Simple Object Principle", "is_correct": False},
+                    {"text": "Secure Code Principle", "is_correct": False},
+                    {"text": "Singleton Pattern Principle", "is_correct": False}
+                ]
             },
             {
-                "text": "HTTP durum kodu 404 ne anlama gelir?",
+                "text": "Hangi HTTP durum kodu (Status Code) 'Yetkilendirme Gerekli / Giriş Yapılmamış' anlamına gelir?",
                 "points": 10,
                 "order": 15,
                 "choices": [
-                    {"text": "Not Found (Kaynak Bulunamadı)", "is_correct": True},
-                    {"text": "Unauthorized (Yetkisiz Erişim)", "is_correct": False},
-                    {"text": "Internal Server Error (Sunucu Hatası)", "is_correct": False},
-                    {"text": "Bad Request (Hatalı İstek)", "is_correct": False},
-                ],
+                    {"text": "401 Unauthorized", "is_correct": True},
+                    {"text": "403 Forbidden", "is_correct": False},
+                    {"text": "404 Not Found", "is_correct": False},
+                    {"text": "500 Internal Server Error", "is_correct": False}
+                ]
             },
             {
-                "text": "CSS'te z-index özelliğinin çalışabilmesi için elemanın position değeri aşağıdakilerden hangisi OLMAMALIDIR?",
+                "text": "Bir algoritmanın zaman karmaşıklığında 'İkili Arama' (Binary Search) algoritmasının karmaşıklığı nedir?",
                 "points": 10,
                 "order": 16,
                 "choices": [
-                    {"text": "static", "is_correct": True},
-                    {"text": "relative", "is_correct": False},
-                    {"text": "absolute", "is_correct": False},
-                    {"text": "fixed", "is_correct": False},
-                ],
+                    {"text": "O(log n)", "is_correct": True},
+                    {"text": "O(n)", "is_correct": False},
+                    {"text": "O(n log n)", "is_correct": False},
+                    {"text": "O(1)", "is_correct": False}
+                ]
             },
             {
-                "text": "CORS (Cross-Origin Resource Sharing) mekanizması web geliştirmede temel olarak neyi denetler?",
+                "text": "React veya modern frontend kütüphanelerinde DOM ağacını bellekte simüle edip yalnızca değişen kısımları güncelleyen yapı nedir?",
                 "points": 10,
                 "order": 17,
                 "choices": [
-                    {"text": "Farklı kaynaklar (origin) arası API istek izinlerini", "is_correct": True},
-                    {"text": "Veritabanı indeksleme performansını", "is_correct": False},
-                    {"text": "HTML sayfalarının yüklenme hızını", "is_correct": False},
-                    {"text": "CSS dosyalarının sıkıştırılmasını", "is_correct": False},
-                ],
+                    {"text": "Virtual DOM", "is_correct": True},
+                    {"text": "Shadow DOM", "is_correct": False},
+                    {"text": "Real DOM", "is_correct": False},
+                    {"text": "Proxy DOM", "is_correct": False}
+                ]
             },
             {
-                "text": "Yazılım geliştirmedeki DRY prensibinin açılımı ve temel kuralı nedir?",
+                "text": "Hangisi tip güvenliği sağlayan ve JavaScript'e derlenen açık kaynaklı bir Microsoft programlama dilidir?",
                 "points": 10,
                 "order": 18,
                 "choices": [
-                    {"text": "Don't Repeat Yourself (Kendini Tekrar Etme)", "is_correct": True},
-                    {"text": "Do Right Yesterday (Dünü Doğru Yap)", "is_correct": False},
-                    {"text": "Dynamic Resource Yield (Dinamik Kaynak Verimi)", "is_correct": False},
-                    {"text": "Data Redundancy Yield (Veri Artıklığı)", "is_correct": False},
-                ],
+                    {"text": "TypeScript", "is_correct": True},
+                    {"text": "Kotlin", "is_correct": False},
+                    {"text": "Dart", "is_correct": False},
+                    {"text": "Rust", "is_correct": False}
+                ]
             },
             {
-                "text": "İlişkisel veritabanlarında iki veya daha fazla tabloyu ortak bir sütun üzerinden birleştirmek için ne kullanılır?",
+                "text": "Django web framework'ünde veritabanı tablolarını Python sınıfları olarak tanımlayan bileşen hangisidir?",
                 "points": 10,
                 "order": 19,
                 "choices": [
-                    {"text": "JOIN", "is_correct": True},
-                    {"text": "MERGE", "is_correct": False},
-                    {"text": "COMBINE", "is_correct": False},
-                    {"text": "ATTACH", "is_correct": False},
-                ],
+                    {"text": "Models (ORM)", "is_correct": True},
+                    {"text": "Views", "is_correct": False},
+                    {"text": "Templates", "is_correct": False},
+                    {"text": "Serializers", "is_correct": False}
+                ]
             },
             {
-                "text": "Python'da bir listenin elemanlarını orijinal listeyi değiştirerek (in-place) sıralayan metot hangisidir?",
+                "text": "CI/CD süreçlerinde 'CD' kısaltması ne anlama gelir?",
                 "points": 10,
                 "order": 20,
                 "choices": [
-                    {"text": "list.sort()", "is_correct": True},
-                    {"text": "sorted(list)", "is_correct": False},
-                    {"text": "list.order()", "is_correct": False},
-                    {"text": "list.arrange()", "is_correct": False},
-                ],
-            },
-        ],
+                    {"text": "Continuous Delivery / Continuous Deployment", "is_correct": True},
+                    {"text": "Continuous Debugging", "is_correct": False},
+                    {"text": "Code Distribution", "is_correct": False},
+                    {"text": "Centralized Database", "is_correct": False}
+                ]
+            }
+        ]
     },
     {
         "name": "Yapay Zeka",
         "slug": "yapay-zeka",
         "icon": "Bot",
         "color_theme": "purple",
+        "music_url": "https://assets.mixkit.co/music/preview/mixkit-tech-house-vibes-130.mp3",
+        "music_title": "Neural Network - Futuristic Tech Beats",
         "questions": [
             {
-                "text": "Makine öğreniminde etiketlenmiş (labeled) veriler kullanılarak modelin eğitildiği öğrenme türü nedir?",
+                "text": "Büyük Dil Modellerinde (LLM) 'GPT' kısaltmasındaki 'T' harfi neyi ifade eder?",
                 "points": 10,
                 "order": 1,
                 "choices": [
-                    {"text": "Denetimli Öğrenme (Supervised Learning)", "is_correct": True},
-                    {"text": "Denetimsiz Öğrenme (Unsupervised Learning)", "is_correct": False},
-                    {"text": "Pekiştirmeli Öğrenme (Reinforcement Learning)", "is_correct": False},
-                    {"text": "Kendi Kendine Denetimli Öğrenme", "is_correct": False},
-                ],
+                    {"text": "Transformer", "is_correct": True},
+                    {"text": "Tensor", "is_correct": False},
+                    {"text": "Translator", "is_correct": False},
+                    {"text": "Training", "is_correct": False}
+                ]
             },
             {
-                "text": "Derin öğrenmede aşırı öğrenmeyi (overfitting) engellemek amacıyla nöronların rastgele kapatılması tekniğine ne denir?",
+                "text": "Makine öğreniminde modelin eğitim verisini ezberleyip test verisinde kötü sonuç vermesi durumuna ne ad verilir?",
                 "points": 10,
                 "order": 2,
                 "choices": [
-                    {"text": "Dropout", "is_correct": True},
+                    {"text": "Overfitting (Aşırı Uyum)", "is_correct": True},
+                    {"text": "Underfitting (Eksik Uyum)", "is_correct": False},
                     {"text": "Backpropagation", "is_correct": False},
-                    {"text": "Batch Normalization", "is_correct": False},
-                    {"text": "Gradient Clipping", "is_correct": False},
-                ],
+                    {"text": "Regularization", "is_correct": False}
+                ]
             },
             {
-                "text": "Büyük Dil Modellerinde (LLM) devrim yaratan Transformer mimarisinin temel yapı taşı olan mekanizma nedir?",
+                "text": "Yapay sinir ağlarında nöronun çıkış değerini belirleyen ve modele doğrusal olmama (non-linearity) katan fonksiyon hangisidir?",
                 "points": 10,
                 "order": 3,
                 "choices": [
-                    {"text": "Self-Attention (Öz-Dikkat) Mekanizması", "is_correct": True},
-                    {"text": "Convolutional Filters (Evrişim Filtreleri)", "is_correct": False},
-                    {"text": "Recurrent Loops (Yinelemeli Döngüler)", "is_correct": False},
-                    {"text": "Decision Trees (Karar Ağaçları)", "is_correct": False},
-                ],
+                    {"text": "Aktivasyon Fonksiyonu (örn: ReLU, Sigmoid)", "is_correct": True},
+                    {"text": "Kayıp Fonksiyonu (Loss Function)", "is_correct": False},
+                    {"text": "Optimizasyon Fonksiyonu (Adam)", "is_correct": False},
+                    {"text": "Batch Normalizasyonu", "is_correct": False}
+                ]
             },
             {
-                "text": "Görüntü işleme, nesne tanıma ve piksel analizi görevlerinde en başarılı yapay sinir ağı mimarisi hangisidir?",
+                "text": "Yapay zekanın bir makine ile insanın ayırt edilemeyecek şekilde sohbet edip edemediğini test eden klasik test nedir?",
                 "points": 10,
                 "order": 4,
                 "choices": [
-                    {"text": "CNN (Convolutional Neural Network)", "is_correct": True},
-                    {"text": "RNN (Recurrent Neural Network)", "is_correct": False},
-                    {"text": "MLP (Multilayer Perceptron)", "is_correct": False},
-                    {"text": "SOM (Self-Organizing Map)", "is_correct": False},
-                ],
+                    {"text": "Turing Testi", "is_correct": True},
+                    {"text": "Voight-Kampff Testi", "is_correct": False},
+                    {"text": "Shannon Testi", "is_correct": False},
+                    {"text": "Lovelace Kriteri", "is_correct": False}
+                ]
             },
             {
-                "text": "Bir modelin eğitim verisini aşırı ezberleyip yeni/görülmemiş verilerde düşük performans göstermesi durumuna ne ad verilir?",
+                "text": "Görsel işleme ve görüntü sınıflandırma modellerinde en yaygın kullanılan derin öğrenme mimarisi hangisidir?",
                 "points": 10,
                 "order": 5,
                 "choices": [
-                    {"text": "Overfitting (Aşırı Öğrenme)", "is_correct": True},
-                    {"text": "Underfitting (Eksik Öğrenme)", "is_correct": False},
-                    {"text": "Data Drift", "is_correct": False},
-                    {"text": "Gradient Explosion", "is_correct": False},
-                ],
+                    {"text": "CNN (Convolutional Neural Network)", "is_correct": True},
+                    {"text": "RNN (Recurrent Neural Network)", "is_correct": False},
+                    {"text": "MLP (Multi-Layer Perceptron)", "is_correct": False},
+                    {"text": "SOM (Self-Organizing Map)", "is_correct": False}
+                ]
             },
             {
-                "text": "Pekiştirmeli öğrenmede (Reinforcement Learning) bir ajanın aksiyonları sonucu çevreden aldığı sinyal nedir?",
+                "text": "Etiketsiz verilerden örüntü ve gizli yapıları keşfetmeye dayalı makine öğrenimi türü hangisidir?",
                 "points": 10,
                 "order": 6,
                 "choices": [
-                    {"text": "Ödül / Ceza (Reward / Penalty)", "is_correct": True},
-                    {"text": "Doğruluk Oranı (Accuracy)", "is_correct": False},
-                    {"text": "Kayıp Değeri (Loss)", "is_correct": False},
-                    {"text": "Token Sayısı", "is_correct": False},
-                ],
+                    {"text": "Denetimsiz Öğrenme (Unsupervised Learning)", "is_correct": True},
+                    {"text": "Denetimli Öğrenme (Supervised Learning)", "is_correct": False},
+                    {"text": "Pekiştirmeli Öğrenme (Reinforcement Learning)", "is_correct": False},
+                    {"text": "Transfer Öğrenme (Transfer Learning)", "is_correct": False}
+                ]
             },
             {
-                "text": "Doğal Dil İşlemede (NLP) metinlerin kelime, kök veya karakter parçalarına bölünmesi işlemine ne ad verilir?",
+                "text": "2017 yılında Google tarafından yayınlanan ve Transformer mimarisini tanıtan çığır açıcı makalenin başlığı nedir?",
                 "points": 10,
                 "order": 7,
                 "choices": [
-                    {"text": "Tokenization (Jetonlama)", "is_correct": True},
-                    {"text": "Lemmatization", "is_correct": False},
-                    {"text": "Stemming", "is_correct": False},
-                    {"text": "Embedding", "is_correct": False},
-                ],
+                    {"text": "Attention Is All You Need", "is_correct": True},
+                    {"text": "Deep Learning for Vision", "is_correct": False},
+                    {"text": "Neural Machine Translation", "is_correct": False},
+                    {"text": "The Next Generation of AI", "is_correct": False}
+                ]
             },
             {
-                "text": "GAN (Üretken Çekişmeli Ağlar) mimarisinde birbirine karşı yarışarak öğrenen iki ana ağ hangileridir?",
+                "text": "Yapay zeka modellerinin yanlış veya uydurma bilgiyi kendinden emin şekilde doğru gibi sunması fenomenine ne ad verilir?",
                 "points": 10,
                 "order": 8,
                 "choices": [
-                    {"text": "Generator (Üreteç) & Discriminator (Ayırt Edici)", "is_correct": True},
-                    {"text": "Encoder (Kodlayıcı) & Decoder (Kod Çözücü)", "is_correct": False},
-                    {"text": "Actor (Aktör) & Critic (Eleştirmen)", "is_correct": False},
-                    {"text": "Feedforward & Feedback", "is_correct": False},
-                ],
+                    {"text": "Halüsinasyon (Hallucination)", "is_correct": True},
+                    {"text": "Bias (Önyargı)", "is_correct": False},
+                    {"text": "Drift (Kayma)", "is_correct": False},
+                    {"text": "Noise (Gürültü)", "is_correct": False}
+                ]
             },
             {
-                "text": "Yapay sinir ağlarında modelin tahmin hatasını ölçen ve eğitimde minimize edilmeye çalışılan fonksiyon nedir?",
+                "text": "Satranç ve Go gibi oyunlarda kullanılan, ödül ve ceza mekanizmasıyla öğrenen yapay zeka yaklaşımı hangisidir?",
                 "points": 10,
                 "order": 9,
                 "choices": [
-                    {"text": "Kayıp Fonksiyonu (Loss Function)", "is_correct": True},
-                    {"text": "Aktivasyon Fonksiyonu", "is_correct": False},
-                    {"text": "Öğrenme Oranı (Learning Rate)", "is_correct": False},
-                    {"text": "Optimizasyon Adımı", "is_correct": False},
-                ],
+                    {"text": "Reinforcement Learning (Pekiştirmeli Öğrenme)", "is_correct": True},
+                    {"text": "Clustering (Kümeleme)", "is_correct": False},
+                    {"text": "Dimensionality Reduction", "is_correct": False},
+                    {"text": "Regression (Regresyon)", "is_correct": False}
+                ]
             },
             {
-                "text": "Yapay sinir ağı katmanlarına doğrusal olmayan (non-linear) özellik kazandıran fonksiyonlara ne ad verilir?",
+                "text": "RAG (Retrieval-Augmented Generation) mimarisinin temel amacı nedir?",
                 "points": 10,
                 "order": 10,
                 "choices": [
-                    {"text": "Aktivasyon Fonksiyonu", "is_correct": True},
-                    {"text": "Kayıp Fonksiyonu", "is_correct": False},
-                    {"text": "Ağırlık Fonksiyonu", "is_correct": False},
-                    {"text": "Türev Fonksiyonu", "is_correct": False},
-                ],
+                    {"text": "Modele harici bir bilgi tabanından güncel veri getirip cevabı zenginleştirmek", "is_correct": True},
+                    {"text": "Modelin parametre sayısını iki katına çıkarmak", "is_correct": False},
+                    {"text": "Yalnızca görsel oluşturmak", "is_correct": False},
+                    {"text": "Modeli GPU yerine sadece CPU'da çalıştırmak", "is_correct": False}
+                ]
             },
             {
-                "text": "Derin öğrenmede sıkça kullanılan 'ReLU' aktivasyon fonksiyonunun açılımı nedir?",
+                "text": "PyTorch ve TensorFlow gibi kütüphanelerde çok boyutlu sayısal dizileri temsil eden temel veri yapısı nedir?",
                 "points": 10,
                 "order": 11,
                 "choices": [
-                    {"text": "Rectified Linear Unit", "is_correct": True},
-                    {"text": "Recurrent Linear Utility", "is_correct": False},
-                    {"text": "Radial Error Logistic Unit", "is_correct": False},
-                    {"text": "Reduced Linear Universal", "is_correct": False},
-                ],
+                    {"text": "Tensor", "is_correct": True},
+                    {"text": "DataFrame", "is_correct": False},
+                    {"text": "Vector3D", "is_correct": False},
+                    {"text": "MatrixSet", "is_correct": False}
+                ]
             },
             {
-                "text": "Vektör veritabanları (Vector DB) yapay zeka uygulamalarında temelde ne için kullanılır?",
+                "text": "Yapay zekada 'Self-Attention' (Öz-Dikkat) mekanizmasının görevi nedir?",
                 "points": 10,
                 "order": 12,
                 "choices": [
-                    {"text": "Embedding vektörleri arasında anlamsal (semantik) benzerlik araması için", "is_correct": True},
-                    {"text": "SQL sorgularını önbelleğe almak için", "is_correct": False},
-                    {"text": "Resim dosyalarını sıkıştırmak için", "is_correct": False},
-                    {"text": "Kullanıcı parolalarını şifrelemek için", "is_correct": False},
-                ],
+                    {"text": "Bir cümledeki kelimelerin birbirleriyle olan anlamsal ilişkisini ağırlıklandırmak", "is_correct": True},
+                    {"text": "Görüntüleri piksel piksel kırpmak", "is_correct": False},
+                    {"text": "Modelin hafızasını her 10 saniyede bir sıfırlamak", "is_correct": False},
+                    {"text": "Veri tabanındaki gereksiz sütunları silmek", "is_correct": False}
+                ]
             },
             {
-                "text": "LLM'lerin harici veri kaynaklarıyla desteklenmesini sağlayan RAG kavramının açılımı nedir?",
+                "text": "Yapay sinir ağlarında hata gradyanlarının geriye doğru hesaplanarak ağırlıkların güncellenmesi algoritması nedir?",
                 "points": 10,
                 "order": 13,
                 "choices": [
-                    {"text": "Retrieval-Augmented Generation", "is_correct": True},
-                    {"text": "Recurrent-Attention Generator", "is_correct": False},
-                    {"text": "Random-Automated Gradient", "is_correct": False},
-                    {"text": "Realtime-Adaptive Graph", "is_correct": False},
-                ],
+                    {"text": "Backpropagation (Geriye Yayılım)", "is_correct": True},
+                    {"text": "Forward Feed", "is_correct": False},
+                    {"text": "Genetic Algorithm", "is_correct": False},
+                    {"text": "Monte Carlo Tree Search", "is_correct": False}
+                ]
             },
             {
-                "text": "Büyük Dil Modellerinde (LLM) 'Temperature' (Sıcaklık) parametresi neyi kontrol eder?",
+                "text": "Üretken Çekişmeli Ağlar (GAN - Generative Adversarial Networks) hangi iki temel bileşenden oluşur?",
                 "points": 10,
                 "order": 14,
                 "choices": [
-                    {"text": "Model yanıtlarındaki rastgelelik ve yaratıcılık derecesini", "is_correct": True},
-                    {"text": "Modelin çalıştığı GPU'nun donanım sıcaklığını", "is_correct": False},
-                    {"text": "Üretilen metnin maksimum token sayısını", "is_correct": False},
-                    {"text": "Modelin cevap verme hızını", "is_correct": False},
-                ],
+                    {"text": "Generator ve Discriminator", "is_correct": True},
+                    {"text": "Encoder ve Decoder", "is_correct": False},
+                    {"text": "Actor ve Critic", "is_correct": False},
+                    {"text": "Sender ve Receiver", "is_correct": False}
+                ]
             },
             {
-                "text": "Yapay sinir ağlarında hatanın çıkıştan geriye doğru aktarılarak ağırlıkların güncellenmesi sürecine ne denir?",
+                "text": "Metinleri yapay zekanın anlayabileceği sayısal vektörlere dönüştürme işlemine ne ad verilir?",
                 "points": 10,
                 "order": 15,
                 "choices": [
-                    {"text": "Backpropagation (Geri Yayılım)", "is_correct": True},
-                    {"text": "Forward Pass (İleri Geçiş)", "is_correct": False},
-                    {"text": "Hebbian Learning", "is_correct": False},
-                    {"text": "Feature Extraction", "is_correct": False},
-                ],
+                    {"text": "Embedding (Gömme)", "is_correct": True},
+                    {"text": "Token Shuffling", "is_correct": False},
+                    {"text": "Quantization", "is_correct": False},
+                    {"text": "Pruning", "is_correct": False}
+                ]
             },
             {
-                "text": "Gözetimsiz öğrenmede benzer özelliklere sahip verilerin otomatik olarak gruplandırılması işlemine ne denir?",
+                "text": "Büyük dil modellerinin yanıtlarını insanların tercihlerine ve güvenliğe uygun hale getirmek için kullanılan yöntem nedir?",
                 "points": 10,
                 "order": 16,
                 "choices": [
-                    {"text": "Clustering (Kümeleme)", "is_correct": True},
-                    {"text": "Classification (Sınıflandırma)", "is_correct": False},
-                    {"text": "Regression (Regresyon)", "is_correct": False},
-                    {"text": "Dimensionality Reduction", "is_correct": False},
-                ],
+                    {"text": "RLHF (Reinforcement Learning from Human Feedback)", "is_correct": True},
+                    {"text": "PCA (Principal Component Analysis)", "is_correct": False},
+                    {"text": "K-Means Clustering", "is_correct": False},
+                    {"text": "SVM (Support Vector Machine)", "is_correct": False}
+                ]
             },
             {
-                "text": "K-Means algoritması hangi makine öğrenimi alanına aittir?",
+                "text": "Vektör veritabanları (Vector Databases - örn: Pinecone, Chroma, Milvus) ne tür aramalar için optimize edilmiştir?",
                 "points": 10,
                 "order": 17,
                 "choices": [
-                    {"text": "Denetimsiz Öğrenme (Kümeleme)", "is_correct": True},
-                    {"text": "Denetimli Öğrenme (Sınıflandırma)", "is_correct": False},
-                    {"text": "Pekiştirmeli Öğrenme", "is_correct": False},
-                    {"text": "Zaman Serisi Tahmini", "is_correct": False},
-                ],
+                    {"text": "Vektör benzerliği ve anlamsal (semantic) arama", "is_correct": True},
+                    {"text": "Yalnızca tam metin anahtar kelime eşleşmesi", "is_correct": False},
+                    {"text": "İlişkisel SQL sorguları (JOIN)", "is_correct": False},
+                    {"text": "CSV dosyası sıkıştırma", "is_correct": False}
+                ]
             },
             {
-                "text": "Turing Testi temel olarak neyi sınamak için tasarlanmıştır?",
+                "text": "Geniş bir veri kümesi üzerinde önceden eğitilmiş bir modelin belirli bir görev için küçük bir veri kümesiyle eğitilmesine ne ad verilir?",
                 "points": 10,
                 "order": 18,
                 "choices": [
-                    {"text": "Bir makinenin insandan ayırt edilemez düzeyde akıllı davranıp davranamayacağını", "is_correct": True},
-                    {"text": "Bir bilgisayarın işlemci saat hızını", "is_correct": False},
-                    {"text": "Bir algoritmanın bellek verimliliğini", "is_correct": False},
-                    {"text": "Veri tabanının sorgu yanıt süresini", "is_correct": False},
-                ],
+                    {"text": "Fine-Tuning (İnce Ayar)", "is_correct": True},
+                    {"text": "Pre-training", "is_correct": False},
+                    {"text": "Prompt Leaking", "is_correct": False},
+                    {"text": "Cold Start", "is_correct": False}
+                ]
             },
             {
-                "text": "NLP'de kelimelerin ve cümlelerin çok boyutlu sayısal vektörlerle ifade edilmesine ne ad verilir?",
+                "text": "Diffusion (Yayılım) modelleri en çok hangi yapay zeka alanında devrim yaratmıştır?",
                 "points": 10,
                 "order": 19,
                 "choices": [
-                    {"text": "Word Embedding (Kelime Gömme)", "is_correct": True},
-                    {"text": "Word Parsing", "is_correct": False},
-                    {"text": "Word Tokenizing", "is_correct": False},
-                    {"text": "Word Hashing", "is_correct": False},
-                ],
+                    {"text": "Metinden yüksek kaliteli görsel/video üretimi (Text-to-Image)", "is_correct": True},
+                    {"text": "Kredi kartı dolandırıcılığı tespiti", "is_correct": False},
+                    {"text": "DNS sunucu yönlendirmesi", "is_correct": False},
+                    {"text": "Veri tabanı indeksleme", "is_correct": False}
+                ]
             },
             {
-                "text": "Derin öğrenme eğitiminde tüm veri setinin sinir ağından tam bir tur geçmesine ne ad verilir?",
+                "text": "Yapay zeka modellerinin bellek kullanımını azaltıp hızını artırmak için ondalıklı sayı duyarlılığını (örn. FP32 -> INT8/INT4) düşürme işlemine ne denir?",
                 "points": 10,
                 "order": 20,
                 "choices": [
-                    {"text": "Epoch", "is_correct": True},
-                    {"text": "Batch", "is_correct": False},
-                    {"text": "Iteration", "is_correct": False},
-                    {"text": "Step", "is_correct": False},
-                ],
-            },
-        ],
+                    {"text": "Quantization (Kuantalama)", "is_correct": True},
+                    {"text": "Distillation", "is_correct": False},
+                    {"text": "Tokenization", "is_correct": False},
+                    {"text": "Normalization", "is_correct": False}
+                ]
+            }
+        ]
     },
     {
         "name": "Bilgisayar Mühendisliği",
         "slug": "bilgisayar-muhendisligi",
         "icon": "Cpu",
         "color_theme": "blue",
+        "music_url": "https://assets.mixkit.co/music/preview/mixkit-game-level-music-689.mp3",
+        "music_title": "Logic Gate - Retro 8-bit Pulse",
         "questions": [
             {
-                "text": "Merkezi İşlem Biriminin (CPU) saat frekansını ölçmek için kullanılan temel birim nedir?",
+                "text": "İşlemcide (CPU) aritmetik ve mantıksal işlemlerin yapıldığı ana donanım birimi hangisidir?",
                 "points": 10,
                 "order": 1,
                 "choices": [
-                    {"text": "Hertz (GHz / MHz)", "is_correct": True},
-                    {"text": "Byte (GB / MB)", "is_correct": False},
-                    {"text": "Flops", "is_correct": False},
-                    {"text": "Watt", "is_correct": False},
-                ],
+                    {"text": "ALU (Arithmetic Logic Unit)", "is_correct": True},
+                    {"text": "Control Unit (CU)", "is_correct": False},
+                    {"text": "Cache (Önbellek)", "is_correct": False},
+                    {"text": "Register (Yazmaç)", "is_correct": False}
+                ]
             },
             {
-                "text": "Bir algoritmanın girdi boyutu büyüdükçe gereken çalışma süresini ifade eden gösterim nedir?",
+                "text": "OSI (Open Systems Interconnection) referans modeli toplamda kaç katmandan oluşur?",
                 "points": 10,
                 "order": 2,
                 "choices": [
-                    {"text": "Big-O Notasyonu", "is_correct": True},
-                    {"text": "Shannon Entropisi", "is_correct": False},
-                    {"text": "Moore Yasası", "is_correct": False},
-                    {"text": "Boolean İfadesi", "is_correct": False},
-                ],
+                    {"text": "7", "is_correct": True},
+                    {"text": "4", "is_correct": False},
+                    {"text": "5", "is_correct": False},
+                    {"text": "6", "is_correct": False}
+                ]
             },
             {
-                "text": "İşletim sisteminde iki veya daha fazla sürecin birbirinin kaynağını beklemesiyle oluşan kilitlenme durumuna ne ad verilir?",
+                "text": "İşletim sistemlerinde iki veya daha fazla sürecin birbirinin kaynak bırakmasını sonsuza kadar beklemesi durumuna ne denir?",
                 "points": 10,
                 "order": 3,
                 "choices": [
-                    {"text": "Deadlock (Ölümcül Kilitlenme)", "is_correct": True},
+                    {"text": "Deadlock (Kilitlenme)", "is_correct": True},
                     {"text": "Race Condition", "is_correct": False},
                     {"text": "Starvation", "is_correct": False},
-                    {"text": "Thrashing", "is_correct": False},
-                ],
+                    {"text": "Context Switch", "is_correct": False}
+                ]
             },
             {
-                "text": "İşlemci (CPU) çekirdeği içerisindeki en hızlı ve doğrudan erişilebilen bellek birimi hangisidir?",
+                "text": "Bilgisayar mimarisinde en hızlı erişim süresine sahip bellek türü hangisidir?",
                 "points": 10,
                 "order": 4,
                 "choices": [
-                    {"text": "Register (Yazmaç)", "is_correct": True},
+                    {"text": "CPU Registers (Yazmaçlar)", "is_correct": True},
                     {"text": "L1 Cache", "is_correct": False},
                     {"text": "RAM", "is_correct": False},
-                    {"text": "ROM", "is_correct": False},
-                ],
+                    {"text": "NVMe SSD", "is_correct": False}
+                ]
             },
             {
-                "text": "Ağ protokolleri olan TCP ile UDP arasındaki en temel fark nedir?",
+                "text": "Mantık kapılarından hangisi 'Her iki giriş de 1 olduğunda 0, diğer durumlarda 1' çıkışı verir?",
                 "points": 10,
                 "order": 5,
                 "choices": [
-                    {"text": "TCP bağlantı temelli ve garantilidir, UDP bağlantısız ve hızlıdır", "is_correct": True},
-                    {"text": "UDP hata kontrolü yapar, TCP yapmaz", "is_correct": False},
-                    {"text": "TCP sadece yerel ağda çalışır, UDP internette çalışır", "is_correct": False},
-                    {"text": "UDP şifreli veri taşır, TCP taşımaz", "is_correct": False},
-                ],
+                    {"text": "NAND Kapısı", "is_correct": True},
+                    {"text": "AND Kapısı", "is_correct": False},
+                    {"text": "OR Kapısı", "is_correct": False},
+                    {"text": "XOR Kapısı", "is_correct": False}
+                ]
             },
             {
-                "text": "İkili (Binary) sayı sistemindeki '1011' sayısının onluk (Decimal) karşılığı kaçtır?",
+                "text": "TCP üçlü el sıkışma (3-way handshake) sırasındaki bayrak sırası hangisidir?",
                 "points": 10,
                 "order": 6,
                 "choices": [
-                    {"text": "11", "is_correct": True},
-                    {"text": "9", "is_correct": False},
-                    {"text": "13", "is_correct": False},
-                    {"text": "15", "is_correct": False},
-                ],
+                    {"text": "SYN -> SYN-ACK -> ACK", "is_correct": True},
+                    {"text": "ACK -> SYN -> ACK", "is_correct": False},
+                    {"text": "SYN -> ACK -> FIN", "is_correct": False},
+                    {"text": "HELLO -> READY -> OK", "is_correct": False}
+                ]
             },
             {
-                "text": "İşlemci mimarisinde komut işleme adımlarını donanım katmanında örtüştürerek hızlandıran teknik nedir?",
+                "text": "Sanal bellek (Virtual Memory) yönetiminde aranan sayfanın RAM'de bulunamaması durumunda ne tetiklenir?",
                 "points": 10,
                 "order": 7,
                 "choices": [
-                    {"text": "Pipelining (Boru Hattı)", "is_correct": True},
-                    {"text": "Caching", "is_correct": False},
-                    {"text": "Branch Prediction", "is_correct": False},
-                    {"text": "Overclocking", "is_correct": False},
-                ],
+                    {"text": "Page Fault", "is_correct": True},
+                    {"text": "Segmentation Fault", "is_correct": False},
+                    {"text": "Stack Overflow", "is_correct": False},
+                    {"text": "Memory Leak", "is_correct": False}
+                ]
             },
             {
-                "text": "OSI referans modelinde IP adresleme ve yönlendirme (routing) işlemleri hangi katmanda gerçekleşir?",
+                "text": "IPv4 adresleri kaç bitten oluşur?",
                 "points": 10,
                 "order": 8,
                 "choices": [
-                    {"text": "Ağ Katmanı (Network Layer - Katman 3)", "is_correct": True},
-                    {"text": "Veri Bağı Katmanı (Data Link Layer)", "is_correct": False},
-                    {"text": "Taşıma Katmanı (Transport Layer)", "is_correct": False},
-                    {"text": "Fiziksel Katman (Physical Layer)", "is_correct": False},
-                ],
+                    {"text": "32 bit", "is_correct": True},
+                    {"text": "64 bit", "is_correct": False},
+                    {"text": "128 bit", "is_correct": False},
+                    {"text": "16 bit", "is_correct": False}
+                ]
             },
             {
-                "text": "CPU ile ana bellek (RAM) arasındaki hız farkını dengelemek amacıyla kullanılan yüksek hızlı ara bellek türü nedir?",
+                "text": "Yığın (Stack) veri yapısının temel çalışma prensibi hangisidir?",
                 "points": 10,
                 "order": 9,
                 "choices": [
-                    {"text": "Cache (Önbellek)", "is_correct": True},
-                    {"text": "Sanal Bellek (Virtual Memory)", "is_correct": False},
-                    {"text": "Flash Bellek", "is_correct": False},
-                    {"text": "ROM Bellek", "is_correct": False},
-                ],
+                    {"text": "LIFO (Last In First Out)", "is_correct": True},
+                    {"text": "FIFO (First In First Out)", "is_correct": False},
+                    {"text": "Random Access", "is_correct": False},
+                    {"text": "Priority Order", "is_correct": False}
+                ]
             },
             {
-                "text": "Moore Yasası (Moore's Law) yaklaşık her 2 yılda bir neyin iki katına çıkacağını öngörmüştür?",
+                "text": "Moore Yasası (Moore's Law) orijinal ifadesiyle yaklaşık neyi öngörmektedir?",
                 "points": 10,
                 "order": 10,
                 "choices": [
-                    {"text": "Entegre devre üzerindeki transistör sayısının", "is_correct": True},
-                    {"text": "İnternet bant genişliği hızının", "is_correct": False},
-                    {"text": "Sabit disk depolama kapasitesinin", "is_correct": False},
-                    {"text": "Programlama dillerinin sayısının", "is_correct": False},
-                ],
+                    {"text": "Bir mikroçipteki transistör sayısının yaklaşık 2 yılda bir ikiye katlanacağını", "is_correct": True},
+                    {"text": "İşlemci saat hızının her yıl 10 kat artacağını", "is_correct": False},
+                    {"text": "Yazılım hatalarının her güncellemede yarıya ineceğini", "is_correct": False},
+                    {"text": "İnternet hızının her 6 ayda bir katlanacağını", "is_correct": False}
+                ]
             },
             {
-                "text": "Binary Search (İkili Arama) algoritmasının çalışabilmesi için arama yapılacak dizide aranan zorunlu şart nedir?",
+                "text": "DNS protokolü standart olarak hangi port numarasını kullanır?",
                 "points": 10,
                 "order": 11,
                 "choices": [
-                    {"text": "Dizinin sıralı (sorted) olması", "is_correct": True},
-                    {"text": "Elemanların sayısal olması", "is_correct": False},
-                    {"text": "Eleman sayısının çift olması", "is_correct": False},
-                    {"text": "Tüm elemanların pozitif olması", "is_correct": False},
-                ],
+                    {"text": "53", "is_correct": True},
+                    {"text": "80", "is_correct": False},
+                    {"text": "443", "is_correct": False},
+                    {"text": "22", "is_correct": False}
+                ]
             },
             {
-                "text": "Birden fazla işlemin aynı paylaşılan veriye eşzamanlı erişerek tutarsız sonuç üretmesi riskine ne ad verilir?",
+                "text": "Von Neumann mimarisinde CPU ile bellek arasındaki veri aktarım darboğazına ne ad verilir?",
                 "points": 10,
                 "order": 12,
                 "choices": [
-                    {"text": "Race Condition (Yarış Durumu)", "is_correct": True},
-                    {"text": "Deadlock (Kilitlenme)", "is_correct": False},
-                    {"text": "Context Switch", "is_correct": False},
-                    {"text": "Page Fault", "is_correct": False},
-                ],
+                    {"text": "Von Neumann Darboğazı (Bottleneck)", "is_correct": True},
+                    {"text": "Amdahl Sınırı", "is_correct": False},
+                    {"text": "Turing Kısıtı", "is_correct": False},
+                    {"text": "Pipeline Stall", "is_correct": False}
+                ]
             },
             {
-                "text": "RAM tükendiğinde işletim sisteminin geçici olarak disk üzerinde kullandığı bellek alanına ne ad verilir?",
+                "text": "İkili tabanda (Binary) '1011' sayısının onluk (Decimal) tabandaki karşılığı nedir?",
                 "points": 10,
                 "order": 13,
                 "choices": [
-                    {"text": "Sanal Bellek / Takas Alanı (Swap)", "is_correct": True},
-                    {"text": "L3 Önbellek", "is_correct": False},
-                    {"text": "CMOS", "is_correct": False},
-                    {"text": "BIOS ROM", "is_correct": False},
-                ],
+                    {"text": "11", "is_correct": True},
+                    {"text": "13", "is_correct": False},
+                    {"text": "9", "is_correct": False},
+                    {"text": "15", "is_correct": False}
+                ]
             },
             {
-                "text": "Bilgisayarlarda negatif tam sayıları ikili sistemde göstermek için en yaygın kullanılan yöntem hangisidir?",
+                "text": "İşletim sisteminde kritik bölgeye (critical section) aynı anda yalnızca bir sürecin girmesini sağlayan senkronizasyon mekanizması nedir?",
                 "points": 10,
                 "order": 14,
                 "choices": [
-                    {"text": "Two's Complement (İkiye Tümleyen)", "is_correct": True},
-                    {"text": "One's Complement (Bire Tümleyen)", "is_correct": False},
-                    {"text": "Sign and Magnitude", "is_correct": False},
-                    {"text": "Hexadecimal Offset", "is_correct": False},
-                ],
+                    {"text": "Mutex / Semaphore", "is_correct": True},
+                    {"text": "Spooling", "is_correct": False},
+                    {"text": "Paging", "is_correct": False},
+                    {"text": "DMA (Direct Memory Access)", "is_correct": False}
+                ]
             },
             {
-                "text": "İkili Arama Ağacında (Binary Search Tree) bir düğümün sol alt çocuğunun değeri kök düğüme göre nasıldır?",
+                "text": "Asimetrik şifreleme (Asymmetric Encryption) yöntemlerinde anahtar yapısı nasıldır?",
                 "points": 10,
                 "order": 15,
                 "choices": [
-                    {"text": "Kök düğümden daima küçüktür", "is_correct": True},
-                    {"text": "Kök düğümden daima büyüktür", "is_correct": False},
-                    {"text": "Kök düğümle eşit olmak zorundadır", "is_correct": False},
-                    {"text": "Rastgele büyüklüktedir", "is_correct": False},
-                ],
+                    {"text": "Genel (Public) ve Özel (Private) olmak üzere iki farklı anahtar kullanılır", "is_correct": True},
+                    {"text": "Tek bir gizli ortak anahtar kullanılır", "is_correct": False},
+                    {"text": "Hiç anahtar kullanılmaz, sadece hash hesaplanır", "is_correct": False},
+                    {"text": "Her blok için rastgele yeni anahtar üretilir", "is_correct": False}
+                ]
             },
             {
-                "text": "Bilgisayar başlatıldığında donanımları test eden (POST) ve işletim sistemini yükleyen firmware yazılımı nedir?",
+                "text": "Graf teorisinde tüm düğümleri en az maliyetle döngüsüz bağlayan alt grafiğe ne denir?",
                 "points": 10,
                 "order": 16,
                 "choices": [
-                    {"text": "BIOS / UEFI", "is_correct": True},
-                    {"text": "İşletim Sistemi Çekirdeği (Kernel)", "is_correct": False},
-                    {"text": "Aygıt Sürücüsü (Driver)", "is_correct": False},
-                    {"text": "Sistem Daemon'ı", "is_correct": False},
-                ],
+                    {"text": "Minimum Kapsayan Ağaç (Minimum Spanning Tree)", "is_correct": True},
+                    {"text": "Tam Graf (Complete Graph)", "is_correct": False},
+                    {"text": "İki Parçalı Graf (Bipartite Graph)", "is_correct": False},
+                    {"text": "Euler Çevrimi", "is_correct": False}
+                ]
             },
             {
-                "text": "RAID 0 disk yapılandırmasının temel amacı nedir?",
+                "text": "CPU mimarisinde komutların parçalara bölünerek eşzamanlı ve ardışık işlenmesi tekniğine ne ad verilir?",
                 "points": 10,
                 "order": 17,
                 "choices": [
-                    {"text": "Okuma/yazma hızını artırmak (Striping)", "is_correct": True},
-                    {"text": "Veri yedekliliği sağlamak (Mirroring)", "is_correct": False},
-                    {"text": "Hata düzeltme paritesi oluşturmak", "is_correct": False},
-                    {"text": "Diski donanımsal olarak şifrelemek", "is_correct": False},
-                ],
+                    {"text": "Pipelining (Boru Hattı)", "is_correct": True},
+                    {"text": "Overclocking", "is_correct": False},
+                    {"text": "Hyper-Threading", "is_correct": False},
+                    {"text": "Branch Prediction", "is_correct": False}
+                ]
             },
             {
-                "text": "Tüm girişleri 1 (True) olduğunda çıkışı 1 veren mantık kapısı hangisidir?",
+                "text": "Bir sabit diskin okuma/yazma kafasının istenen izin üzerine gelene kadar geçen süreye ne ad verilir?",
                 "points": 10,
                 "order": 18,
                 "choices": [
-                    {"text": "AND (VE) Kapısı", "is_correct": True},
-                    {"text": "OR (VEYA) Kapısı", "is_correct": False},
-                    {"text": "XOR Kapısı", "is_correct": False},
-                    {"text": "NOT Kapısı", "is_correct": False},
-                ],
+                    {"text": "Seek Time (Arama Süresi)", "is_correct": True},
+                    {"text": "Rotational Latency", "is_correct": False},
+                    {"text": "Transfer Rate", "is_correct": False},
+                    {"text": "Burst Rate", "is_correct": False}
+                ]
             },
             {
-                "text": "En kötü durumda (Worst-case) bile O(n log n) zaman karmaşıklığı sunan sıralama algoritması hangisidir?",
+                "text": "Veri tabanlarında ACID prensiplerindeki 'I' harfi neyi ifade eder?",
                 "points": 10,
                 "order": 19,
                 "choices": [
-                    {"text": "Merge Sort", "is_correct": True},
-                    {"text": "Quick Sort", "is_correct": False},
-                    {"text": "Bubble Sort", "is_correct": False},
-                    {"text": "Insertion Sort", "is_correct": False},
-                ],
+                    {"text": "Isolation (Yalıtım)", "is_correct": True},
+                    {"text": "Integrity (Bütünlük)", "is_correct": False},
+                    {"text": "Indexing (İndeksleme)", "is_correct": False},
+                    {"text": "Iteration (Yineleme)", "is_correct": False}
+                ]
             },
             {
-                "text": "İşletim sisteminde çalışmakta olan bir programın bellekteki ve işlemcideki aktif çalışma örneğine ne ad verilir?",
+                "text": "RISC (Reduced Instruction Set Computer) işlemci mimarisinin temel avantajı nedir?",
                 "points": 10,
                 "order": 20,
                 "choices": [
-                    {"text": "Process (Süreç)", "is_correct": True},
-                    {"text": "Thread (İş Parçacığı)", "is_correct": False},
-                    {"text": "Routine", "is_correct": False},
-                    {"text": "Microservice", "is_correct": False},
-                ],
-            },
-        ],
+                    {"text": "Basitleştirilmiş komut seti ile komutların çoğunu tek bir saat çevriminde çalıştırmak", "is_correct": True},
+                    {"text": "Binlerce karmaşık donanımsal komuta sahip olmak", "is_correct": False},
+                    {"text": "Hiç önbellek (cache) gerektirmemesi", "is_correct": False},
+                    {"text": "Sadece 8 bitlik verilerle çalışması", "is_correct": False}
+                ]
+            }
+        ]
     },
     {
         "name": "Ülkeler",
         "slug": "ulkeler",
         "icon": "Globe",
         "color_theme": "emerald",
+        "music_url": "https://assets.mixkit.co/music/preview/mixkit-traveling-around-the-world-1216.mp3",
+        "music_title": "World Odyssey - Global Acoustic Journey",
         "questions": [
+            {
+                "text": "Avustralya'nın başkenti neresidir?",
+                "points": 10,
+                "order": 1,
+                "choices": [
+                    {"text": "Canberra", "is_correct": True},
+                    {"text": "Sidney", "is_correct": False},
+                    {"text": "Melbourne", "is_correct": False},
+                    {"text": "Brisbane", "is_correct": False}
+                ]
+            },
             {
                 "text": "Dünyanın yüzölçümü bakımından en büyük ülkesi hangisidir?",
                 "points": 10,
-                "order": 1,
+                "order": 2,
                 "choices": [
                     {"text": "Rusya", "is_correct": True},
                     {"text": "Kanada", "is_correct": False},
                     {"text": "Çin", "is_correct": False},
-                    {"text": "Amerika Birleşik Devletleri", "is_correct": False},
-                ],
+                    {"text": "Amerika Birleşik Devletleri", "is_correct": False}
+                ]
             },
             {
-                "text": "Avustralya'nın başkenti neresidir?",
-                "points": 10,
-                "order": 2,
-                "choices": [
-                    {"text": "Kanberra", "is_correct": True},
-                    {"text": "Sidney", "is_correct": False},
-                    {"text": "Melbourne", "is_correct": False},
-                    {"text": "Brisbane", "is_correct": False},
-                ],
-            },
-            {
-                "text": "Toprakları hem Asya hem de Avrupa kıtasında yer alan kıtalararası mega şehir hangisidir?",
+                "text": "Brezilya'nın resmi dili hangisidir?",
                 "points": 10,
                 "order": 3,
                 "choices": [
-                    {"text": "İstanbul", "is_correct": True},
-                    {"text": "Kahire", "is_correct": False},
-                    {"text": "Bakü", "is_correct": False},
-                    {"text": "Tiflis", "is_correct": False},
-                ],
+                    {"text": "Portekizce", "is_correct": True},
+                    {"text": "İspanyolca", "is_correct": False},
+                    {"text": "İngilizce", "is_correct": False},
+                    {"text": "Fransızca", "is_correct": False}
+                ]
             },
             {
-                "text": "Nüfus bakımından şu an dünyanın en kalabalık ülkesi hangisidir?",
+                "text": "Dünyanın en uzun nehri olarak kabul edilen Nil Nehri hangi kıtadadır?",
                 "points": 10,
                 "order": 4,
-                "choices": [
-                    {"text": "Hindistan", "is_correct": True},
-                    {"text": "Çin", "is_correct": False},
-                    {"text": "ABD", "is_correct": False},
-                    {"text": "Endonezya", "is_correct": False},
-                ],
-            },
-            {
-                "text": "Japonya'nın resmi para birimi nedir?",
-                "points": 10,
-                "order": 5,
-                "choices": [
-                    {"text": "Yen", "is_correct": True},
-                    {"text": "Yuan", "is_correct": False},
-                    {"text": "Won", "is_correct": False},
-                    {"text": "Baht", "is_correct": False},
-                ],
-            },
-            {
-                "text": "Dünyanın en uzun nehri kabul edilen Nil Nehri hangi kıtadadır?",
-                "points": 10,
-                "order": 6,
                 "choices": [
                     {"text": "Afrika", "is_correct": True},
                     {"text": "Güney Amerika", "is_correct": False},
                     {"text": "Asya", "is_correct": False},
-                    {"text": "Kuzey Amerika", "is_correct": False},
-                ],
+                    {"text": "Avrupa", "is_correct": False}
+                ]
             },
             {
-                "text": "Güney Amerika kıtasında resmi dili Portekizce olan ülke hangisidir?",
+                "text": "Hem Asya hem de Avrupa kıtasında toprağı bulunan transkontinental ülke hangisidir?",
+                "points": 10,
+                "order": 5,
+                "choices": [
+                    {"text": "Türkiye", "is_correct": True},
+                    {"text": "Almanya", "is_correct": False},
+                    {"text": "İran", "is_correct": False},
+                    {"text": "İtalya", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Japonya'nın en yüksek dağı hangisidir?",
+                "points": 10,
+                "order": 6,
+                "choices": [
+                    {"text": "Fuji Dağı", "is_correct": True},
+                    {"text": "Everest Dağı", "is_correct": False},
+                    {"text": "Kilimanjaro Dağı", "is_correct": False},
+                    {"text": "Mont Blanc", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Dünyanın en kalabalık nüfusuna sahip kıtası hangisidir?",
                 "points": 10,
                 "order": 7,
                 "choices": [
-                    {"text": "Brezilya", "is_correct": True},
-                    {"text": "Arjantin", "is_correct": False},
-                    {"text": "Şili", "is_correct": False},
-                    {"text": "Kolombiya", "is_correct": False},
-                ],
+                    {"text": "Asya", "is_correct": True},
+                    {"text": "Afrika", "is_correct": False},
+                    {"text": "Avrupa", "is_correct": False},
+                    {"text": "Kuzey Amerika", "is_correct": False}
+                ]
             },
             {
-                "text": "İsviçre'nin fiili (de facto) federal başkenti neresidir?",
+                "text": "İskandinav ülkesi olan İzlanda'nın başkenti neresidir?",
                 "points": 10,
                 "order": 8,
-                "choices": [
-                    {"text": "Bern", "is_correct": True},
-                    {"text": "Zürih", "is_correct": False},
-                    {"text": "Cenevre", "is_correct": False},
-                    {"text": "Basel", "is_correct": False},
-                ],
-            },
-            {
-                "text": "Dünyanın hem yüzölçümü hem de nüfus bakımından en küçük bağımsız devleti hangisidir?",
-                "points": 10,
-                "order": 9,
-                "choices": [
-                    {"text": "Vatikan", "is_correct": True},
-                    {"text": "Monako", "is_correct": False},
-                    {"text": "San Marino", "is_correct": False},
-                    {"text": "Lihtenştayn", "is_correct": False},
-                ],
-            },
-            {
-                "text": "Aşağıdaki ülkelerden hangisi İskandinavya / Kuzey Avrupa ülkesi DEĞİLDİR?",
-                "points": 10,
-                "order": 10,
-                "choices": [
-                    {"text": "Portekiz", "is_correct": True},
-                    {"text": "Norveç", "is_correct": False},
-                    {"text": "İsveç", "is_correct": False},
-                    {"text": "Finlandiya", "is_correct": False},
-                ],
-            },
-            {
-                "text": "Eyfel Kulesi hangi ülkenin başkentinde yer alır?",
-                "points": 10,
-                "order": 11,
-                "choices": [
-                    {"text": "Fransa (Paris)", "is_correct": True},
-                    {"text": "İtalya (Roma)", "is_correct": False},
-                    {"text": "İspanya (Madrid)", "is_correct": False},
-                    {"text": "Almanya (Berlin)", "is_correct": False},
-                ],
-            },
-            {
-                "text": "Dünyanın en yüksek zirvesi olan Everest Tepesi hangi dağ sırasındadır?",
-                "points": 10,
-                "order": 12,
-                "choices": [
-                    {"text": "Himalayalar", "is_correct": True},
-                    {"text": "Alpler", "is_correct": False},
-                    {"text": "And Dağları", "is_correct": False},
-                    {"text": "Ural Dağları", "is_correct": False},
-                ],
-            },
-            {
-                "text": "Kanada ulusal bayrağında simge olarak hangi ağacın yaprağı yer alır?",
-                "points": 10,
-                "order": 13,
-                "choices": [
-                    {"text": "Akçaağaç (Maple)", "is_correct": True},
-                    {"text": "Meşe Yaprağı", "is_correct": False},
-                    {"text": "Çam İğnesi", "is_correct": False},
-                    {"text": "Zeytin Dalı", "is_correct": False},
-                ],
-            },
-            {
-                "text": "Akdeniz ile Kızıldeniz'i birbirine bağlayan yapay deniz kanalı hangisidir?",
-                "points": 10,
-                "order": 14,
-                "choices": [
-                    {"text": "Süveyş Kanalı", "is_correct": True},
-                    {"text": "Panama Kanalı", "is_correct": False},
-                    {"text": "Korint Kanalı", "is_correct": False},
-                    {"text": "Kiel Kanalı", "is_correct": False},
-                ],
-            },
-            {
-                "text": "Afrika kıtasının en yüksek dağı olan Kilimanjaro hangi ülkededir?",
-                "points": 10,
-                "order": 15,
-                "choices": [
-                    {"text": "Tanzanya", "is_correct": True},
-                    {"text": "Kenya", "is_correct": False},
-                    {"text": "Güney Afrika", "is_correct": False},
-                    {"text": "Uganda", "is_correct": False},
-                ],
-            },
-            {
-                "text": "Dünyada 260 binden fazla ada ile en çok adaya sahip olan ülke hangisidir?",
-                "points": 10,
-                "order": 16,
-                "choices": [
-                    {"text": "İsveç", "is_correct": True},
-                    {"text": "Norveç", "is_correct": False},
-                    {"text": "Filipinler", "is_correct": False},
-                    {"text": "Endonezya", "is_correct": False},
-                ],
-            },
-            {
-                "text": "Güney Amerika'da Peru sınırları içinde yer alan ünlü antik İnka şehri hangisidir?",
-                "points": 10,
-                "order": 17,
-                "choices": [
-                    {"text": "Machu Picchu", "is_correct": True},
-                    {"text": "Chichen Itza", "is_correct": False},
-                    {"text": "Petra", "is_correct": False},
-                    {"text": "Tikal", "is_correct": False},
-                ],
-            },
-            {
-                "text": "İzlanda'nın başkenti neresidir?",
-                "points": 10,
-                "order": 18,
                 "choices": [
                     {"text": "Reykjavik", "is_correct": True},
                     {"text": "Oslo", "is_correct": False},
                     {"text": "Helsinki", "is_correct": False},
-                    {"text": "Kopenhag", "is_correct": False},
-                ],
+                    {"text": "Kopenhag", "is_correct": False}
+                ]
             },
             {
-                "text": "Dünyanın en derin ve en eski tatlı su gölü olan Baykal Gölü hangi ülkededir?",
+                "text": "Dünyanın en derin gölü olan Baykal Gölü hangi ülkededir?",
+                "points": 10,
+                "order": 9,
+                "choices": [
+                    {"text": "Rusya", "is_correct": True},
+                    {"text": "Kanada", "is_correct": False},
+                    {"text": "Moğolistan", "is_correct": False},
+                    {"text": "Kazakistan", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Akdeniz'i Atlas Okyanusu'na bağlayan stratejik boğaz hangisidir?",
+                "points": 10,
+                "order": 10,
+                "choices": [
+                    {"text": "Cebelitarık Boğazı", "is_correct": True},
+                    {"text": "İstanbul Boğazı", "is_correct": False},
+                    {"text": "Hürmüz Boğazı", "is_correct": False},
+                    {"text": "Malakka Boğazı", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Kanada'nın başkenti neresidir?",
+                "points": 10,
+                "order": 11,
+                "choices": [
+                    {"text": "Ottawa", "is_correct": True},
+                    {"text": "Toronto", "is_correct": False},
+                    {"text": "Montreal", "is_correct": False},
+                    {"text": "Vancouver", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Dünyanın en yüksek kesintisiz şelalesi olan Angel Şelalesi hangi Güney Amerika ülkesindedir?",
+                "points": 10,
+                "order": 12,
+                "choices": [
+                    {"text": "Venezuela", "is_correct": True},
+                    {"text": "Brezilya", "is_correct": False},
+                    {"text": "Arjantin", "is_correct": False},
+                    {"text": "Kolombiya", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Hangi ülkenin bayrağı dikdörtgen veya kare şeklinde olmayan tek ulusal bayraktır?",
+                "points": 10,
+                "order": 13,
+                "choices": [
+                    {"text": "Nepal", "is_correct": True},
+                    {"text": "İsviçre", "is_correct": False},
+                    {"text": "Vatikan", "is_correct": False},
+                    {"text": "Bhutan", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Afrika kıtasının en yüksek noktası olan Kilimanjaro Dağı hangi ülkededir?",
+                "points": 10,
+                "order": 14,
+                "choices": [
+                    {"text": "Tanzanya", "is_correct": True},
+                    {"text": "Kenya", "is_correct": False},
+                    {"text": "Etiyopya", "is_correct": False},
+                    {"text": "Uganda", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Dünyanın en küçük bağımsız devleti (yüzölçümü ve nüfus bakımından) hangisidir?",
+                "points": 10,
+                "order": 15,
+                "choices": [
+                    {"text": "Vatikan", "is_correct": True},
+                    {"text": "Monako", "is_correct": False},
+                    {"text": "San Marino", "is_correct": False},
+                    {"text": "Lihtenştayn", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Büyük Kanyon (Grand Canyon) hangi ülkede yer alır?",
+                "points": 10,
+                "order": 16,
+                "choices": [
+                    {"text": "Amerika Birleşik Devletleri", "is_correct": True},
+                    {"text": "Meksika", "is_correct": False},
+                    {"text": "Avustralya", "is_correct": False},
+                    {"text": "Şili", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Büyük Set Resifi (Great Barrier Reef) hangi ülkenin kıyılarında bulunur?",
+                "points": 10,
+                "order": 17,
+                "choices": [
+                    {"text": "Avustralya", "is_correct": True},
+                    {"text": "Endonezya", "is_correct": False},
+                    {"text": "Filipinler", "is_correct": False},
+                    {"text": "Yeni Zelanda", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Tarihi Machu Picchu antik şehri hangi ülkededir?",
+                "points": 10,
+                "order": 18,
+                "choices": [
+                    {"text": "Peru", "is_correct": True},
+                    {"text": "Bolivya", "is_correct": False},
+                    {"text": "Ekvador", "is_correct": False},
+                    {"text": "Şili", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Dünyanın en kurak sıcak çölü olan Atacama Çölü hangi ülkededir?",
                 "points": 10,
                 "order": 19,
                 "choices": [
-                    {"text": "Rusya", "is_correct": True},
-                    {"text": "Moğolistan", "is_correct": False},
-                    {"text": "Kanada", "is_correct": False},
-                    {"text": "Kazakistan", "is_correct": False},
-                ],
+                    {"text": "Şili", "is_correct": True},
+                    {"text": "Mısır", "is_correct": False},
+                    {"text": "Suudi Arabistan", "is_correct": False},
+                    {"text": "Namibya", "is_correct": False}
+                ]
             },
             {
-                "text": "Hem Atlas Okyanusu'na hem de Akdeniz'e kıyısı bulunan Afrika ülkesi hangisidir?",
+                "text": "Hollanda'nın anayasal başkenti neresidir?",
                 "points": 10,
                 "order": 20,
                 "choices": [
-                    {"text": "Fas", "is_correct": True},
-                    {"text": "Cezayir", "is_correct": False},
-                    {"text": "Tunus", "is_correct": False},
-                    {"text": "Libya", "is_correct": False},
-                ],
-            },
-        ],
+                    {"text": "Amsterdam", "is_correct": True},
+                    {"text": "Lahey (Den Haag)", "is_correct": False},
+                    {"text": "Rotterdam", "is_correct": False},
+                    {"text": "Utrecht", "is_correct": False}
+                ]
+            }
+        ]
     },
     {
         "name": "Fizik",
         "slug": "fizik",
         "icon": "Atom",
         "color_theme": "orange",
+        "music_url": "https://assets.mixkit.co/music/preview/mixkit-deep-space-ambient-588.mp3",
+        "music_title": "Cosmic Horizon - Deep Space Ambient",
         "questions": [
             {
-                "text": "Boşlukta ışığın yayılma hızı yaklaşık olarak saniyede kaç kilometredir?",
+                "text": "Işığın boşluktaki yaklaşık hızı ne kadardır?",
                 "points": 10,
                 "order": 1,
                 "choices": [
                     {"text": "300.000 km/s", "is_correct": True},
                     {"text": "150.000 km/s", "is_correct": False},
-                    {"text": "1.000.000 km/s", "is_correct": False},
-                    {"text": "30.000 km/s", "is_correct": False},
-                ],
+                    {"text": "3.000 km/s", "is_correct": False},
+                    {"text": "1.000.000 km/s", "is_correct": False}
+                ]
             },
             {
-                "text": "Albert Einstein'ın ünlü kütle-enerji eşdeğerliği bağıntısı hangisidir?",
+                "text": "Newton'un İkinci Hareket Yasası'nın temel formülü nedir?",
                 "points": 10,
                 "order": 2,
                 "choices": [
-                    {"text": "E = mc²", "is_correct": True},
-                    {"text": "F = m * a", "is_correct": False},
+                    {"text": "F = m * a", "is_correct": True},
+                    {"text": "E = m * c^2", "is_correct": False},
                     {"text": "V = I * R", "is_correct": False},
-                    {"text": "PV = nRT", "is_correct": False},
-                ],
+                    {"text": "P = F / A", "is_correct": False}
+                ]
             },
             {
-                "text": "SI birim sisteminde kuvvetin (Force) standart birimi nedir?",
+                "text": "Termodinamiğin Sıfırıncı Yasası hangi temel fiziksel kavramı tanımlar?",
                 "points": 10,
                 "order": 3,
                 "choices": [
-                    {"text": "Newton (N)", "is_correct": True},
-                    {"text": "Joule (J)", "is_correct": False},
-                    {"text": "Pascal (Pa)", "is_correct": False},
-                    {"text": "Watt (W)", "is_correct": False},
-                ],
+                    {"text": "Sıcaklık ve Termal Denge", "is_correct": True},
+                    {"text": "Entropi", "is_correct": False},
+                    {"text": "Enerjinin Korunumu", "is_correct": False},
+                    {"text": "Mutlak Sıfır Noktası", "is_correct": False}
+                ]
             },
             {
-                "text": "Termodinamiğin birinci yasası temel olarak hangi korunum ilkesini ifade eder?",
+                "text": "Kuantum mekaniğinde bir parçacığın hem konumunu hem de momentumunu aynı anda kesin olarak ölçemeyeceğimizi belirten ilke nedir?",
                 "points": 10,
                 "order": 4,
                 "choices": [
-                    {"text": "Enerjinin Korunumu", "is_correct": True},
-                    {"text": "Momentumun Korunumu", "is_correct": False},
-                    {"text": "Kütlenin Korunumu", "is_correct": False},
-                    {"text": "Elektriksel Yükün Korunumu", "is_correct": False},
-                ],
+                    {"text": "Heisenberg Belirsizlik İlkesi", "is_correct": True},
+                    {"text": "Pauli Dışlama İlkesi", "is_correct": False},
+                    {"text": "Schrödinger Dalga İlkesi", "is_correct": False},
+                    {"text": "De Broglie Hipotezi", "is_correct": False}
+                ]
             },
             {
-                "text": "Elektrik akım şiddetinin SI birim sistemindeki birimi nedir?",
+                "text": "Albert Einstein'a 1921 yılında Nobel Fizik Ödülü'nü kazandıran çalışma hangisidir?",
                 "points": 10,
                 "order": 5,
+                "choices": [
+                    {"text": "Fotoelektrik Etki Açıklaması", "is_correct": True},
+                    {"text": "Genel Görelilik Teorisi", "is_correct": False},
+                    {"text": "Özel Görelilik Teorisi (E=mc^2)", "is_correct": False},
+                    {"text": "Brown Hareketi", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Elektrik akımının uluslararası (SI) birimi nedir?",
+                "points": 10,
+                "order": 6,
                 "choices": [
                     {"text": "Amper (A)", "is_correct": True},
                     {"text": "Volt (V)", "is_correct": False},
                     {"text": "Ohm (Ω)", "is_correct": False},
-                    {"text": "Coulomb (C)", "is_correct": False},
-                ],
+                    {"text": "Watt (W)", "is_correct": False}
+                ]
             },
             {
-                "text": "Işığın farklı yoğunluktaki bir ortama geçerken hız ve doğrultu değiştirmesi olayına ne denir?",
-                "points": 10,
-                "order": 6,
-                "choices": [
-                    {"text": "Kırılma (Refraction)", "is_correct": True},
-                    {"text": "Yansıma (Reflection)", "is_correct": False},
-                    {"text": "Kırınım (Diffraction)", "is_correct": False},
-                    {"text": "Girişim (Interference)", "is_correct": False},
-                ],
-            },
-            {
-                "text": "Dünya yüzeyinde yerçekimi ivmesi (g) yaklaşık olarak kaç m/s² kabul edilir?",
+                "text": "Doğadaki dört temel kuvvet arasında en zayıf olanı hangisidir?",
                 "points": 10,
                 "order": 7,
                 "choices": [
-                    {"text": "9.8 m/s²", "is_correct": True},
-                    {"text": "3.14 m/s²", "is_correct": False},
-                    {"text": "12.4 m/s²", "is_correct": False},
-                    {"text": "6.67 m/s²", "is_correct": False},
-                ],
+                    {"text": "Kütleçekim Kuvveti (Gravity)", "is_correct": True},
+                    {"text": "Elektromanyetik Kuvvet", "is_correct": False},
+                    {"text": "Güçlü Nükleer Kuvvet", "is_correct": False},
+                    {"text": "Zayıf Nükleer Kuvvet", "is_correct": False}
+                ]
             },
             {
-                "text": "Bir cismin mevcut hareket veya durma durumunu koruma eğilimine ne ad verilir?",
+                "text": "Mutlak sıfır noktası sıcaklığı Celsius cinsinden yaklaşık kaçtır?",
                 "points": 10,
                 "order": 8,
                 "choices": [
-                    {"text": "Eylemsizlik (Inertia)", "is_correct": True},
-                    {"text": "Sürtünme", "is_correct": False},
-                    {"text": "İtme (Impulse)", "is_correct": False},
-                    {"text": "Tork", "is_correct": False},
-                ],
+                    {"text": "-273.15 °C", "is_correct": True},
+                    {"text": "0 °C", "is_correct": False},
+                    {"text": "-100 °C", "is_correct": False},
+                    {"text": "-459.67 °C", "is_correct": False}
+                ]
             },
             {
-                "text": "Ses dalgaları ile ilgili aşağıdaki fiziksel gerçeklerden hangisi doğrudur?",
+                "text": "Ses dalgaları hangi ortamda kesinlikle yayılamaz?",
                 "points": 10,
                 "order": 9,
                 "choices": [
-                    {"text": "Ses dalgaları mekanik dalgadır ve boşlukta yayılamaz", "is_correct": True},
-                    {"text": "Ses dalgaları ışıktan daha hızlı yayılır", "is_correct": False},
-                    {"text": "Ses sadece katılarda yayılır", "is_correct": False},
-                    {"text": "Sesin yayılma hızı ortam yoğunluğundan bağımsızdır", "is_correct": False},
-                ],
+                    {"text": "Uzay Boşluğu (Vakum)", "is_correct": True},
+                    {"text": "Su", "is_correct": False},
+                    {"text": "Hava", "is_correct": False},
+                    {"text": "Çelik", "is_correct": False}
+                ]
             },
             {
-                "text": "Kuantum fiziğinde ışığın ve parçacıkların hem dalga hem tanecik davranışı sergilemesine ne denir?",
+                "text": "Elektromanyetik tayfta en yüksek enerjiye ve en kısa dalga boyuna sahip ışın türü hangisidir?",
                 "points": 10,
                 "order": 10,
                 "choices": [
-                    {"text": "Dalga-Parçacık İkiliği (Wave-Particle Duality)", "is_correct": True},
-                    {"text": "Kuantum Dolanıklığı (Entanglement)", "is_correct": False},
-                    {"text": "Kuantum Tünelleme", "is_correct": False},
-                    {"text": "Süperpozisyon İlkesi", "is_correct": False},
-                ],
+                    {"text": "Gama Işınları", "is_correct": True},
+                    {"text": "X Işınları", "is_correct": False},
+                    {"text": "Morötesi (UV)", "is_correct": False},
+                    {"text": "Radyo Dalgaları", "is_correct": False}
+                ]
             },
             {
-                "text": "SI birim sisteminde frekansın (saniyedeki titreşim sayısı) standart birimi nedir?",
+                "text": "Bir cismin kütlesi ile yerçekimi ivmesinin çarpımı neyi verir?",
                 "points": 10,
                 "order": 11,
                 "choices": [
-                    {"text": "Hertz (Hz)", "is_correct": True},
-                    {"text": "Desibel (dB)", "is_correct": False},
-                    {"text": "Radyan", "is_correct": False},
-                    {"text": "Candela", "is_correct": False},
-                ],
+                    {"text": "Ağırlık", "is_correct": True},
+                    {"text": "Hacim", "is_correct": False},
+                    {"text": "Yoğunluk", "is_correct": False},
+                    {"text": "Basınç", "is_correct": False}
+                ]
             },
             {
-                "text": "Newton'ın ikinci hareket yasasının temel matematiksel formülü nedir?",
+                "text": "Evrenin genişlediğini galaksilerin ışığındaki 'Kızıla Kayma' (Redshift) ile keşfeden gökbilimci kimdir?",
                 "points": 10,
                 "order": 12,
                 "choices": [
-                    {"text": "F = m * a", "is_correct": True},
-                    {"text": "W = F * d", "is_correct": False},
-                    {"text": "P = F / A", "is_correct": False},
-                    {"text": "p = m * v", "is_correct": False},
-                ],
+                    {"text": "Edwin Hubble", "is_correct": True},
+                    {"text": "Galileo Galilei", "is_correct": False},
+                    {"text": "Johannes Kepler", "is_correct": False},
+                    {"text": "Stephen Hawking", "is_correct": False}
+                ]
             },
             {
-                "text": "Elektrik devrelerinde Gerilim (V), Akım (I) ve Direnç (R) ilişkisini veren temel yasa hangisidir?",
+                "text": "Atom çekirdeğinde yer alan ve elektriksel yükü nötr (yüksüz) olan parçacık hangisidir?",
                 "points": 10,
                 "order": 13,
                 "choices": [
-                    {"text": "Ohm Yasası (V = I * R)", "is_correct": True},
-                    {"text": "Faraday İndüksiyon Yasası", "is_correct": False},
-                    {"text": "Lenz Yasası", "is_correct": False},
-                    {"text": "Coulomb Yasası", "is_correct": False},
-                ],
+                    {"text": "Nötron", "is_correct": True},
+                    {"text": "Proton", "is_correct": False},
+                    {"text": "Elektron", "is_correct": False},
+                    {"text": "Pozitron", "is_correct": False}
+                ]
             },
             {
-                "text": "Maddenin katı, sıvı ve gaz halleri dışındaki iyonlaşmış gaz formundaki dördüncü hali nedir?",
+                "text": "Işığın hem dalga hem de parçacık özelliği göstermesi durumuna fizikte ne ad verilir?",
                 "points": 10,
                 "order": 14,
+                "choices": [
+                    {"text": "Dalga-Parçacık İkiliği (Wave-Particle Duality)", "is_correct": True},
+                    {"text": "Kırılma (Refraction)", "is_correct": False},
+                    {"text": "Girişim (Interference)", "is_correct": False},
+                    {"text": "Kuantum Tünelleme", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Manyetik alan içinden geçen iletkende gerilim indüklenmesini açıklayan temel yasa hangisidir?",
+                "points": 10,
+                "order": 15,
+                "choices": [
+                    {"text": "Faraday İndüksiyon Yasası", "is_correct": True},
+                    {"text": "Coulomb Yasası", "is_correct": False},
+                    {"text": "Ohm Yasası", "is_correct": False},
+                    {"text": "Gauss Yasası", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Maddenin katı, sıvı ve gaz dışındaki dördüncü iyonize hali nedir?",
+                "points": 10,
+                "order": 16,
                 "choices": [
                     {"text": "Plazma", "is_correct": True},
                     {"text": "Bose-Einstein Yoğuşması", "is_correct": False},
                     {"text": "Süperiletken", "is_correct": False},
-                    {"text": "Sıvı Kristal", "is_correct": False},
-                ],
+                    {"text": "Kristal", "is_correct": False}
+                ]
             },
             {
-                "text": "Birim yüzeye dik olarak etki eden net kuvvet miktarına ne ad verilir?",
-                "points": 10,
-                "order": 15,
-                "choices": [
-                    {"text": "Basınç (Pressure)", "is_correct": True},
-                    {"text": "Güç (Power)", "is_correct": False},
-                    {"text": "İş (Work)", "is_correct": False},
-                    {"text": "Gerilme (Tension)", "is_correct": False},
-                ],
-            },
-            {
-                "text": "Sabit süratle dairesel yörüngede dönen bir cismin ivmesi neden sıfırdan farklıdır?",
-                "points": 10,
-                "order": 16,
-                "choices": [
-                    {"text": "Hız vektörünün yönü sürekli değiştiği için (Merkezcil İvme)", "is_correct": True},
-                    {"text": "Kütlesi sürekli arttığı için", "is_correct": False},
-                    {"text": "Sürtünme sıfır olduğu için", "is_correct": False},
-                    {"text": "Enerji kaybettiği için", "is_correct": False},
-                ],
-            },
-            {
-                "text": "Termodinamikte bir sistemin düzensizliğinin veya rastgeleliğinin ölçüsü olan kavram nedir?",
+                "text": "Evrendeki bir karadeliğin ışığın bile kaçamadığı sınır çizgisine ne ad verilir?",
                 "points": 10,
                 "order": 17,
                 "choices": [
-                    {"text": "Entropi", "is_correct": True},
-                    {"text": "Entalpi", "is_correct": False},
-                    {"text": "İç Enerji", "is_correct": False},
-                    {"text": "Isı Kapasitesi", "is_correct": False},
-                ],
+                    {"text": "Olay Ufku (Event Horizon)", "is_correct": True},
+                    {"text": "Tekillik (Singularity)", "is_correct": False},
+                    {"text": "Akkresyon Diski", "is_correct": False},
+                    {"text": "Foton Küresi", "is_correct": False}
+                ]
             },
             {
-                "text": "Kuantum mekaniğinde bir parçacığın konumu ile momentumunun aynı anda kesin olarak ölçülemeyeceğini belirten ilke nedir?",
+                "text": "Bir sistemdeki düzensizliğin veya rastgeleliğin ölçüsüne ne ad verilir?",
                 "points": 10,
                 "order": 18,
                 "choices": [
-                    {"text": "Heisenberg Belirsizlik İlkesi", "is_correct": True},
-                    {"text": "Pauli Dışarlama İlkesi", "is_correct": False},
-                    {"text": "Schrödinger Dalga Denklemi", "is_correct": False},
-                    {"text": "Planck Yasası", "is_correct": False},
-                ],
+                    {"text": "Entropi", "is_correct": True},
+                    {"text": "Entalpi", "is_correct": False},
+                    {"text": "Egzotermi", "is_correct": False},
+                    {"text": "Özgül Isı", "is_correct": False}
+                ]
             },
             {
-                "text": "Güneş ve yıldızların merkezinde hidrojen atomlarının birleşerek helyuma dönüşmesiyle devasa enerji üreten reaksiyon nedir?",
+                "text": "CERN'deki Büyük Hadron Çarpıştırıcısı'nda (LHC) 2012 yılında keşfedilen ve diğer parçacıklara kütle kazandıran bozon hangisidir?",
                 "points": 10,
                 "order": 19,
                 "choices": [
-                    {"text": "Nükleer Füzyon (Çekirdek Kaynaşması)", "is_correct": True},
-                    {"text": "Nükleer Fisyon (Çekirdek Bölünmesi)", "is_correct": False},
-                    {"text": "Kimyasal Yanma", "is_correct": False},
-                    {"text": "Radyoaktif Bozunma", "is_correct": False},
-                ],
+                    {"text": "Higgs Bozonu", "is_correct": True},
+                    {"text": "Foton", "is_correct": False},
+                    {"text": "Gluon", "is_correct": False},
+                    {"text": "Graviton", "is_correct": False}
+                ]
             },
             {
-                "text": "Elektromanyetik spektrumda dalga boyu en kısa ve enerjisi en yüksek olan ışın türü hangisidir?",
+                "text": "Kendi üzerine uygulanan kuvvet kaldırıldığında cismin eski şekline geri dönme özelliğine ne denir?",
                 "points": 10,
                 "order": 20,
                 "choices": [
-                    {"text": "Gama Işınları", "is_correct": True},
-                    {"text": "X Işınları (Röntgen)", "is_correct": False},
-                    {"text": "Morötesi (UV) Işınlar", "is_correct": False},
-                    {"text": "Radyo Dalgaları", "is_correct": False},
-                ],
-            },
-        ],
+                    {"text": "Elastiklik", "is_correct": True},
+                    {"text": "Plastiklik", "is_correct": False},
+                    {"text": "Viskozite", "is_correct": False},
+                    {"text": "Kırılganlık", "is_correct": False}
+                ]
+            }
+        ]
     },
     {
         "name": "Futbol",
         "slug": "futbol",
         "icon": "Trophy",
         "color_theme": "rose",
+        "music_url": "https://assets.mixkit.co/music/preview/mixkit-stadium-rock-beat-1122.mp3",
+        "music_title": "Stadium Champions - Energetic Rock Beat",
         "questions": [
             {
-                "text": "Futbol tarihinde FIFA Dünya Kupası'nı en çok kazanan ülke hangisidir?",
+                "text": "FIFA Dünya Kupası'nı 5 kez ile en çok kazanan ülke hangisidir?",
                 "points": 10,
                 "order": 1,
                 "choices": [
                     {"text": "Brezilya", "is_correct": True},
                     {"text": "Almanya", "is_correct": False},
                     {"text": "İtalya", "is_correct": False},
-                    {"text": "Arjantin", "is_correct": False},
-                ],
+                    {"text": "Arjantin", "is_correct": False}
+                ]
             },
             {
-                "text": "UEFA Şampiyonlar Ligi kupasını müzesine en çok götüren kulüp hangisidir?",
+                "text": "Futbol tarihinde 'Ballon d'Or' (Altın Top) ödülünü en çok kazanan futbolcu kimdir?",
                 "points": 10,
                 "order": 2,
+                "choices": [
+                    {"text": "Lionel Messi", "is_correct": True},
+                    {"text": "Cristiano Ronaldo", "is_correct": False},
+                    {"text": "Michel Platini", "is_correct": False},
+                    {"text": "Johan Cruyff", "is_correct": False}
+                ]
+            },
+            {
+                "text": "UEFA Şampiyonlar Ligi'ni (ve eski adıyla Şampiyon Kulüpler Kupası'nı) en çok kazanan kulüp hangisidir?",
+                "points": 10,
+                "order": 3,
                 "choices": [
                     {"text": "Real Madrid", "is_correct": True},
                     {"text": "AC Milan", "is_correct": False},
                     {"text": "Bayern Münih", "is_correct": False},
-                    {"text": "Liverpool", "is_correct": False},
-                ],
+                    {"text": "Liverpool", "is_correct": False}
+                ]
             },
             {
-                "text": "2022 FIFA Dünya Kupası finalinde şampiyon olan milli takım hangisidir?",
-                "points": 10,
-                "order": 3,
-                "choices": [
-                    {"text": "Arjantin", "is_correct": True},
-                    {"text": "Fransa", "is_correct": False},
-                    {"text": "Hırvatistan", "is_correct": False},
-                    {"text": "Fas", "is_correct": False},
-                ],
-            },
-            {
-                "text": "Kariyerinde en çok Ballon d'Or (Altın Top) ödülü kazanan futbolcu kimdir?",
+                "text": "Standart bir futbol maçında bir takım sahada kaç oyuncuyla yer alır?",
                 "points": 10,
                 "order": 4,
                 "choices": [
-                    {"text": "Lionel Messi", "is_correct": True},
-                    {"text": "Cristiano Ronaldo", "is_correct": False},
-                    {"text": "Johan Cruyff", "is_correct": False},
-                    {"text": "Michel Platini", "is_correct": False},
-                ],
+                    {"text": "11", "is_correct": True},
+                    {"text": "10", "is_correct": False},
+                    {"text": "12", "is_correct": False},
+                    {"text": "9", "is_correct": False}
+                ]
             },
             {
-                "text": "Futbolda aşağıdaki durumlardan hangisinde doğrudan ofsayt kuralı GEÇERSİZDİR?",
+                "text": "2000 yılında UEFA Kupası'nı (Avrupa Ligi) ve UEFA Süper Kupa'yı kazanan Türk futbol takımı hangisidir?",
                 "points": 10,
                 "order": 5,
-                "choices": [
-                    {"text": "Taç Atışı", "is_correct": True},
-                    {"text": "Direkt Serbest Vuruş", "is_correct": False},
-                    {"text": "Endirekt Serbest Vuruş", "is_correct": False},
-                    {"text": "Hakem Atışı", "is_correct": False},
-                ],
-            },
-            {
-                "text": "2000 yılında UEFA Kupası ve UEFA Süper Kupa'yı kazanan Türk futbol kulübü hangisidir?",
-                "points": 10,
-                "order": 6,
                 "choices": [
                     {"text": "Galatasaray", "is_correct": True},
                     {"text": "Fenerbahçe", "is_correct": False},
                     {"text": "Beşiktaş", "is_correct": False},
-                    {"text": "Trabzonspor", "is_correct": False},
-                ],
+                    {"text": "Trabzonspor", "is_correct": False}
+                ]
             },
             {
-                "text": "Standart bir futbol kalesinde iki direk arasındaki içten içe mesafe kaç metredir?",
+                "text": "Futbolda ofsayt kuralında kaleci dışında rakip kaleye en yakın en az kaç savunma oyuncusu bulunmalıdır?",
+                "points": 10,
+                "order": 6,
+                "choices": [
+                    {"text": "2 oyuncu (genelde kaleci + 1 savunmacı)", "is_correct": True},
+                    {"text": "1 oyuncu", "is_correct": False},
+                    {"text": "3 oyuncu", "is_correct": False},
+                    {"text": "Hiç oyuncu gerekmez", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Dünya Kupası tarihinde atılan en hızlı gol (11. saniyede) hangi futbolcuya aittir?",
                 "points": 10,
                 "order": 7,
                 "choices": [
-                    {"text": "7.32 metre", "is_correct": True},
-                    {"text": "7.50 metre", "is_correct": False},
-                    {"text": "6.80 metre", "is_correct": False},
-                    {"text": "8.00 metre", "is_correct": False},
-                ],
+                    {"text": "Hakan Şükür (2002 Türkiye - G.Kore)", "is_correct": True},
+                    {"text": "Ronaldo Nazario", "is_correct": False},
+                    {"text": "Pele", "is_correct": False},
+                    {"text": "Clint Dempsey", "is_correct": False}
+                ]
             },
             {
-                "text": "Bir futbol karşılaşmasında normal sürede her bir yarı kaçar dakikadır?",
+                "text": "Premier Lig tarihinde 2003-2004 sezonunu hiç yenilgisiz ('The Invincibles') şampiyon tamamlayan takım hangisidir?",
                 "points": 10,
                 "order": 8,
-                "choices": [
-                    {"text": "45 Dakika", "is_correct": True},
-                    {"text": "40 Dakika", "is_correct": False},
-                    {"text": "50 Dakika", "is_correct": False},
-                    {"text": "35 Dakika", "is_correct": False},
-                ],
-            },
-            {
-                "text": "Takım arkadaşının bilerek ayakla verdiği geri pası kaleci eliyle tutarsa hakem ne kararı verir?",
-                "points": 10,
-                "order": 9,
-                "choices": [
-                    {"text": "Endirekt Serbest Vuruş (Çift Vuruş)", "is_correct": True},
-                    {"text": "Penaltı", "is_correct": False},
-                    {"text": "Direkt Serbest Vuruş", "is_correct": False},
-                    {"text": "Sarı Kart & Taç Atışı", "is_correct": False},
-                ],
-            },
-            {
-                "text": "Futbol tarihinde 'Siyah İnci' ve 'Kral' lakabıyla anılan efsanevi futbolcu kimdir?",
-                "points": 10,
-                "order": 10,
-                "choices": [
-                    {"text": "Pelé", "is_correct": True},
-                    {"text": "Diego Maradona", "is_correct": False},
-                    {"text": "Ronaldinho", "is_correct": False},
-                    {"text": "Romário", "is_correct": False},
-                ],
-            },
-            {
-                "text": "Almanya'da düzenlenen EURO 2024 Avrupa Futbol Şampiyonası'nda kupayı kim kazandı?",
-                "points": 10,
-                "order": 11,
-                "choices": [
-                    {"text": "İspanya", "is_correct": True},
-                    {"text": "İngiltere", "is_correct": False},
-                    {"text": "Almanya", "is_correct": False},
-                    {"text": "Fransa", "is_correct": False},
-                ],
-            },
-            {
-                "text": "Futbol sahasında penaltı noktası kale çizgisinden tam olarak kaç metre uzaklıktadır?",
-                "points": 10,
-                "order": 12,
-                "choices": [
-                    {"text": "11 Metre", "is_correct": True},
-                    {"text": "9.15 Metre", "is_correct": False},
-                    {"text": "12 Metre", "is_correct": False},
-                    {"text": "10 Metre", "is_correct": False},
-                ],
-            },
-            {
-                "text": "Bir takımda kaç oyuncu kırmızı kart görürse (takım 6 kişiye düşerse) maç tatil edilir?",
-                "points": 10,
-                "order": 13,
-                "choices": [
-                    {"text": "5 Oyuncu", "is_correct": True},
-                    {"text": "4 Oyuncu", "is_correct": False},
-                    {"text": "3 Oyuncu", "is_correct": False},
-                    {"text": "6 Oyuncu", "is_correct": False},
-                ],
-            },
-            {
-                "text": "Dünyaca ünlü 'El Clásico' derbisi hangi iki takım arasında oynanır?",
-                "points": 10,
-                "order": 14,
-                "choices": [
-                    {"text": "Real Madrid - Barcelona", "is_correct": True},
-                    {"text": "Real Madrid - Atlético Madrid", "is_correct": False},
-                    {"text": "Barcelona - Sevilla", "is_correct": False},
-                    {"text": "Inter - AC Milan", "is_correct": False},
-                ],
-            },
-            {
-                "text": "Süper Lig tarihinde sezonu namağlup (yenilgisiz) şampiyon tamamlayan tek takım hangisidir?",
-                "points": 10,
-                "order": 15,
-                "choices": [
-                    {"text": "Beşiktaş (1991-92)", "is_correct": True},
-                    {"text": "Galatasaray", "is_correct": False},
-                    {"text": "Fenerbahçe", "is_correct": False},
-                    {"text": "Trabzonspor", "is_correct": False},
-                ],
-            },
-            {
-                "text": "Futbolda 'Hat-trick' terimi hangi başarıyı ifade eder?",
-                "points": 10,
-                "order": 16,
-                "choices": [
-                    {"text": "Bir oyuncunun aynı maçta 3 gol atmasını", "is_correct": True},
-                    {"text": "Bir oyuncunun 3 asist yapmasını", "is_correct": False},
-                    {"text": "Kalecinin 3 penaltı kurtarmasını", "is_correct": False},
-                    {"text": "Bir takımın 3 maç üst üste kazanmasını", "is_correct": False},
-                ],
-            },
-            {
-                "text": "2003-2004 Premier Lig sezonunu hiç yenilmeden tamamlayıp 'The Invincibles' unvanını alan takım hangisidir?",
-                "points": 10,
-                "order": 17,
                 "choices": [
                     {"text": "Arsenal", "is_correct": True},
                     {"text": "Manchester United", "is_correct": False},
                     {"text": "Chelsea", "is_correct": False},
-                    {"text": "Manchester City", "is_correct": False},
-                ],
+                    {"text": "Manchester City", "is_correct": False}
+                ]
             },
             {
-                "text": "FIFA Dünya Kupası finalleri tarihinde toplam 16 golle en çok gol atan oyuncu rekoru kime aittir?",
+                "text": "Futbol oyun kurallarına göre standart bir penaltı noktasının kale çizgisine olan mesafesi kaç metredir?",
+                "points": 10,
+                "order": 9,
+                "choices": [
+                    {"text": "11 metre (12 yarda)", "is_correct": True},
+                    {"text": "9.15 metre", "is_correct": False},
+                    {"text": "12.5 metre", "is_correct": False},
+                    {"text": "10 metre", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Futbolda bir oyuncunun aynı maçta 3 gol atmasına ne ad verilir?",
+                "points": 10,
+                "order": 10,
+                "choices": [
+                    {"text": "Hat-trick", "is_correct": True},
+                    {"text": "Duble", "is_correct": False},
+                    {"text": "Poker", "is_correct": False},
+                    {"text": "Trivela", "is_correct": False}
+                ]
+            },
+            {
+                "text": "2022 FIFA Dünya Kupası finalinde Fransa'yı penaltılarla mağlup ederek şampiyon olan ülke hangisidir?",
+                "points": 10,
+                "order": 11,
+                "choices": [
+                    {"text": "Arjantin", "is_correct": True},
+                    {"text": "Hırvatistan", "is_correct": False},
+                    {"text": "Fas", "is_correct": False},
+                    {"text": "Brezilya", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Futbolda 'Tiki-taka' pas oyun tarzı en çok hangi kulüp ve teknik direktör ile özdeşleşmiştir?",
+                "points": 10,
+                "order": 12,
+                "choices": [
+                    {"text": "Barcelona / Pep Guardiola", "is_correct": True},
+                    {"text": "Real Madrid / Zinedine Zidane", "is_correct": False},
+                    {"text": "Chelsea / Jose Mourinho", "is_correct": False},
+                    {"text": "Liverpool / Jurgen Klopp", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Futbolda ayağın dışıyla yapılan kavisli vuruş tekniğine ne ad verilir?",
+                "points": 10,
+                "order": 13,
+                "choices": [
+                    {"text": "Trivela", "is_correct": True},
+                    {"text": "Rabona", "is_correct": False},
+                    {"text": "Röveşata", "is_correct": False},
+                    {"text": "Plase", "is_correct": False}
+                ]
+            },
+            {
+                "text": "EURO 2008 Avrupa Futbol Şampiyonası'nda Türkiye yarı finale yükselirken son dakika mucizeleriyle turnuvaya damga vuran teknik direktör kimdir?",
+                "points": 10,
+                "order": 14,
+                "choices": [
+                    {"text": "Fatih Terim", "is_correct": True},
+                    {"text": "Mustafa Denizli", "is_correct": False},
+                    {"text": "Şenol Güneş", "is_correct": False},
+                    {"text": "Ersun Yanal", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Uluslararası futbol kurallarını belirleyen ve düzenleyen tek yetkili kurul hangisidir?",
+                "points": 10,
+                "order": 15,
+                "choices": [
+                    {"text": "IFAB (International Football Association Board)", "is_correct": True},
+                    {"text": "FIFA Executive Board", "is_correct": False},
+                    {"text": "UEFA Referees Committee", "is_correct": False},
+                    {"text": "CAS", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Futbolda kalecinin ceza sahası içinde topu eliyle tutabildiği maksimum süre kuralı kaç saniyedir?",
+                "points": 10,
+                "order": 16,
+                "choices": [
+                    {"text": "6 saniye", "is_correct": True},
+                    {"text": "10 saniye", "is_correct": False},
+                    {"text": "4 saniye", "is_correct": False},
+                    {"text": "Süre sınırı yoktur", "is_correct": False}
+                ]
+            },
+            {
+                "text": "1986 Dünya Kupası'nda Diego Maradona'nın İngiltere'ye elle attığı ve daha sonra 'Tanrı'nın Eli' olarak nitelendirdiği maçta attığı diğer efsanevi gol ne olarak anılır?",
+                "points": 10,
+                "order": 17,
+                "choices": [
+                    {"text": "Yüzyılın Golü (Goal of the Century)", "is_correct": True},
+                    {"text": "Altın Gol", "is_correct": False},
+                    {"text": "Akrep Vuruşu", "is_correct": False},
+                    {"text": "Panenka Golü", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Futbolda bir taç atışı doğrudan rakip kaleye girerse oyun nasıl başlar?",
                 "points": 10,
                 "order": 18,
                 "choices": [
-                    {"text": "Miroslav Klose", "is_correct": True},
-                    {"text": "Ronaldo Nazário", "is_correct": False},
-                    {"text": "Gerd Müller", "is_correct": False},
-                    {"text": "Kylian Mbappé", "is_correct": False},
-                ],
+                    {"text": "Aut (Kale Vuruşu) ile", "is_correct": True},
+                    {"text": "Gol geçerli sayılır", "is_correct": False},
+                    {"text": "Taç atışı tekrarlanır", "is_correct": False},
+                    {"text": "Korner ile", "is_correct": False}
+                ]
             },
             {
                 "text": "Futbolda 'Panenka' vuruş tekniği penaltıda nasıl uygulanır?",
@@ -1357,8 +1368,8 @@ CATEGORIES_DATA = [
                     {"text": "Topun dibine hafifçe vurup aşırtarak kalenin ortasına göndermek", "is_correct": True},
                     {"text": "Çok sert ve 90'a doğru vurmak", "is_correct": False},
                     {"text": "Ters ayakla kaleciyi yanıltarak vurmak", "is_correct": False},
-                    {"text": "Yerden köşeye plase bırakmak", "is_correct": False},
-                ],
+                    {"text": "Yerden köşeye plase bırakmak", "is_correct": False}
+                ]
             },
             {
                 "text": "FIFA tarafından her yıl dünyada yılın en estetik ve güzel golünü atan futbolcuya verilen ödül nedir?",
@@ -1368,16 +1379,246 @@ CATEGORIES_DATA = [
                     {"text": "FIFA Puskás Ödülü", "is_correct": True},
                     {"text": "Altın Ayakkabı", "is_correct": False},
                     {"text": "Yashin Ödülü", "is_correct": False},
-                    {"text": "Ballon d'Or", "is_correct": False},
-                ],
-            },
-        ],
+                    {"text": "Ballon d'Or", "is_correct": False}
+                ]
+            }
+        ]
     },
+    {
+        "name": "Aşçılık",
+        "slug": "ascilik",
+        "icon": "ChefHat",
+        "color_theme": "amber",
+        "music_url": "https://assets.mixkit.co/music/preview/mixkit-cozy-lounge-bossa-nova-851.mp3",
+        "music_title": "Bistro Gourmet - Cozy Kitchen Bossa Nova",
+        "questions": [
+            {
+                "text": "Fransız mutfağında yemek yapımına başlamadan önce tüm malzemelerin doğranıp hazırlanması anlamına gelen terim nedir?",
+                "points": 10,
+                "order": 1,
+                "choices": [
+                    {"text": "Mise en place", "is_correct": True},
+                    {"text": "Sous-vide", "is_correct": False},
+                    {"text": "Flambe", "is_correct": False},
+                    {"text": "Blanching", "is_correct": False}
+                ]
+            },
+            {
+                "text": "İtalyan mutfağında makarnanın aşırı yumuşamadan, hafif dişe gelecek kıvamda pişirilmesine ne ad verilir?",
+                "points": 10,
+                "order": 2,
+                "choices": [
+                    {"text": "Al dente", "is_correct": True},
+                    {"text": "Al forno", "is_correct": False},
+                    {"text": "Conchiglie", "is_correct": False},
+                    {"text": "Antipasto", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Beşamel sosun temelini oluşturan, eşit miktarda tereyağı ve unun kavrulmasıyla hazırlanan bağlayıcı karışıma ne denir?",
+                "points": 10,
+                "order": 3,
+                "choices": [
+                    {"text": "Meyane (Roux)", "is_correct": True},
+                    {"text": "Ganaş (Ganache)", "is_correct": False},
+                    {"text": "Marinasyon", "is_correct": False},
+                    {"text": "Pesto", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Sebzelerin 1-2 mm kalınlığında ve 4-5 cm uzunluğunda ince kibrit çöpü şeklinde doğranması tekniği hangisidir?",
+                "points": 10,
+                "order": 4,
+                "choices": [
+                    {"text": "Jülyen (Julienne)", "is_correct": True},
+                    {"text": "Brunoise (Sıçandişi)", "is_correct": False},
+                    {"text": "Chiffonade", "is_correct": False},
+                    {"text": "Mirpua (Mirepoix)", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Geleneksel İtalyan tatlısı Tiramisu’nun kremasında kullanılan temel peynir türü hangisidir?",
+                "points": 10,
+                "order": 5,
+                "choices": [
+                    {"text": "Mascarpone", "is_correct": True},
+                    {"text": "Ricotta", "is_correct": False},
+                    {"text": "Mozzarella", "is_correct": False},
+                    {"text": "Parmesan", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Geleneksel Türk mutfağında 'Hünkar Beğendi' yemeğinin altındaki közlenmiş püre hangi sebzeden yapılır?",
+                "points": 10,
+                "order": 6,
+                "choices": [
+                    {"text": "Patlıcan", "is_correct": True},
+                    {"text": "Kabak", "is_correct": False},
+                    {"text": "Kereviz", "is_correct": False},
+                    {"text": "Kırmızı Biber", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Çorbalara ve sulu yemeklere parlaklık, kıvam ve lezzet vermek için yumurta sarısı ve limonla yapılan işleme ne denir?",
+                "points": 10,
+                "order": 7,
+                "choices": [
+                    {"text": "Terbiye", "is_correct": True},
+                    {"text": "Karamelize etme", "is_correct": False},
+                    {"text": "Deklaze", "is_correct": False},
+                    {"text": "Fermantasyon", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Etin yüksek ısıda tava veya ızgarada hızla pişirilerek lezzet ve suyunu içine hapsetme tekniği hangisidir?",
+                "points": 10,
+                "order": 8,
+                "choices": [
+                    {"text": "Mühürleme (Searing)", "is_correct": True},
+                    {"text": "Poşe etme (Poaching)", "is_correct": False},
+                    {"text": "Haşlama (Boiling)", "is_correct": False},
+                    {"text": "Fümeleme (Smoking)", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Japon mutfağında suşi rulosu (maki) yapımında kullanılan preslenmiş kurutulmuş deniz yosununa ne ad verilir?",
+                "points": 10,
+                "order": 9,
+                "choices": [
+                    {"text": "Nori", "is_correct": True},
+                    {"text": "Wakame", "is_correct": False},
+                    {"text": "Kombu", "is_correct": False},
+                    {"text": "Wasabi", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Fransız mutfağında tereyağı ve yumurta sarısının emülsiyonu ile yapılan ünlü 5 temel ana sostan (Mother Sauces) biri hangisidir?",
+                "points": 10,
+                "order": 10,
+                "choices": [
+                    {"text": "Hollandez (Hollandaise)", "is_correct": True},
+                    {"text": "Chimichurri", "is_correct": False},
+                    {"text": "Guacamole", "is_correct": False},
+                    {"text": "Tzatziki", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Crocus sativus çiçeğinin tepeciklerinden toplanan, gramaj olarak dünyanın en pahalı baharatı hangisidir?",
+                "points": 10,
+                "order": 11,
+                "choices": [
+                    {"text": "Safran", "is_correct": True},
+                    {"text": "Kakule", "is_correct": False},
+                    {"text": "Vanilya Çubuğu", "is_correct": False},
+                    {"text": "Muskat Cevizi", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Yiyeceklerin vakumlu torbalarda su banyosu içinde düşük ve kontrollü sıcaklıkta pişirilmesi yöntemine ne ad verilir?",
+                "points": 10,
+                "order": 12,
+                "choices": [
+                    {"text": "Sous-vide", "is_correct": True},
+                    {"text": "Braising", "is_correct": False},
+                    {"text": "Broiling", "is_correct": False},
+                    {"text": "Confit", "is_correct": False}
+                ]
+            },
+            {
+                "text": "İtalyan mutfağında Arborio pirinci ve et suyu kullanılarak kremsi dokuda pişirilen geleneksel pirinç yemeği hangisidir?",
+                "points": 10,
+                "order": 13,
+                "choices": [
+                    {"text": "Risotto", "is_correct": True},
+                    {"text": "Paella", "is_correct": False},
+                    {"text": "Polenta", "is_correct": False},
+                    {"text": "Gnocchi", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Ekmek yapımında un ve suyun yoğrulmadan önce bekletilerek glüten ağının kendiliğinden gelişmesini sağlayan dinlendirme aşaması nedir?",
+                "points": 10,
+                "order": 14,
+                "choices": [
+                    {"text": "Otoliz (Autolyse)", "is_correct": True},
+                    {"text": "Fermantasyon", "is_correct": False},
+                    {"text": "Mayalama", "is_correct": False},
+                    {"text": "Taban pişirme", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Geleneksel Meksika sosu Guacamole'nin ana maddesi olan yeşil tropikal meyve hangisidir?",
+                "points": 10,
+                "order": 15,
+                "choices": [
+                    {"text": "Avokado", "is_correct": True},
+                    {"text": "Misket Limonu (Lime)", "is_correct": False},
+                    {"text": "Kivi", "is_correct": False},
+                    {"text": "Jalapeno Biberi", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Soya sosu, mirin, sake ve şeker karışımından yapılan, ızgara et ve tavuklara parlaklık ve tatlı-tuzlu lezzet katan Japon sosu hangisidir?",
+                "points": 10,
+                "order": 16,
+                "choices": [
+                    {"text": "Teriyaki", "is_correct": True},
+                    {"text": "Ponzu", "is_correct": False},
+                    {"text": "Sriracha", "is_correct": False},
+                    {"text": "Hoisin", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Çikolatanın parlak görünmesi, oda sıcaklığında erimemesi ve kırıldığında net bir ses çıkarması için yapılan kristalleştirme işlemi nedir?",
+                "points": 10,
+                "order": 17,
+                "choices": [
+                    {"text": "Temperleme (Tempering)", "is_correct": True},
+                    {"text": "Emülsiyon", "is_correct": False},
+                    {"text": "Karamelizasyon", "is_correct": False},
+                    {"text": "Homojenizasyon", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Sebzelerin kaynayan tuzlu suya kısa süre daldırılıp hemen ardından buzlu suya atılarak renginin ve diriliğinin korunması işlemine ne denir?",
+                "points": 10,
+                "order": 18,
+                "choices": [
+                    {"text": "Blanching (Şok Haşlama)", "is_correct": True},
+                    {"text": "Steaming (Buharda Pişirme)", "is_correct": False},
+                    {"text": "Deep Frying (Derin Yağda Kızartma)", "is_correct": False},
+                    {"text": "Soteleme (Sauteing)", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Kırım Tatar mutfağı kökenli olup Türkiye'de özellikle Eskişehir ile özdeşleşen, içi kıymalı yarım ay şeklindeki börek hangisidir?",
+                "points": 10,
+                "order": 19,
+                "choices": [
+                    {"text": "Çiğ Börek (Çibörek)", "is_correct": True},
+                    {"text": "Su Böreği", "is_correct": False},
+                    {"text": "Kol Böreği", "is_correct": False},
+                    {"text": "Boyoz", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Pasta ve tatlılarda krema ve eritilmiş çikolatanın pürüzsüzce karıştırılmasıyla hazırlanan zengin dolgu ve kaplama kremasına ne ad verilir?",
+                "points": 10,
+                "order": 20,
+                "choices": [
+                    {"text": "Ganaş (Ganache)", "is_correct": True},
+                    {"text": "Pralin", "is_correct": False},
+                    {"text": "Mereng (Beze)", "is_correct": False},
+                    {"text": "Krem Patissiere", "is_correct": False}
+                ]
+            }
+        ]
+    }
 ]
 
 
 class Command(BaseCommand):
-    help = "Populate initial 5 categories and 100 questions (20 per category) for Rapid Quiz"
+    help = "Populate initial categories and questions for Rapid Quiz"
 
     def handle(self, *args, **options):
         self.stdout.write(self.style.NOTICE("Seeding Rapid Quiz categories and questions..."))
@@ -1394,6 +1635,8 @@ class Command(BaseCommand):
                         "name": cat_data["name"],
                         "icon": cat_data["icon"],
                         "color_theme": cat_data["color_theme"],
+                        "music_url": cat_data.get("music_url"),
+                        "music_title": cat_data.get("music_title"),
                         "is_active": True,
                     }
                 )
@@ -1431,4 +1674,3 @@ class Command(BaseCommand):
                 f"Tamamlandi! {total_categories} Kategori, {total_questions} Soru ve {total_choices} Sik veritabanina eklendi."
             )
         )
-

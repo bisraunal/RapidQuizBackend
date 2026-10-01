@@ -15,12 +15,14 @@
 
 ## 2. Temel Fonksiyonel Gereksinimler (Functional Requirements)
 
-### 2.1. Kategoriler (5 Kategori)
-1. 💻 **Yazılım (Software)**
-2. 🤖 **Yapay Zeka (Artificial Intelligence)**
-3. ⚙️ **Bilgisayar Mühendisliği (Computer Engineering)**
-4. 🌍 **Ülkeler (Countries & Geography)**
-5. ⚛️ **Fizik (Physics)**
+### 2.1. Kategoriler (7 Kategori) & Kategoriye Özel Fon Müzikleri
+1. 💻 **Yazılım (Software)** — *Cyber City (Synthwave Code Beat)*
+2. 🤖 **Yapay Zeka (Artificial Intelligence)** — *Neural Network (Futuristic Tech Beats)*
+3. ⚙️ **Bilgisayar Mühendisliği (Computer Engineering)** — *Logic Gate (Retro 8-bit Pulse)*
+4. 🌍 **Ülkeler (Countries & Geography)** — *World Odyssey (Global Acoustic Journey)*
+5. ⚛️ **Fizik (Physics)** — *Cosmic Horizon (Deep Space Ambient)*
+6. 🏆 **Futbol (Football)** — *Stadium Champions (Energetic Rock Beat)*
+7. 🍳 **Aşçılık (Cooking & Gastronomy)** — *Bistro Gourmet (Cozy Kitchen Bossa Nova)*
 
 ### 2.2. Oyun Mekaniği & Akış
 1. **Kategori Seçimi:** Kullanıcı ana ekranda 5 kategoriden birini seçer.

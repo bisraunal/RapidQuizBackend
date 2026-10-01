@@ -13,6 +13,8 @@ class CategorySerializer(serializers.ModelSerializer):
             "slug",
             "icon",
             "color_theme",
+            "music_url",
+            "music_title",
             "is_active",
             "question_count",
         ]

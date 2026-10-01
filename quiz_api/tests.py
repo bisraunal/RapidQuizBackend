@@ -16,6 +16,8 @@ class RapidQuizAPITests(TestCase):
             slug="yazilim",
             icon="Code2",
             color_theme="cyan",
+            music_url="https://assets.mixkit.co/music/preview/mixkit-cyber-city-110.mp3",
+            music_title="Cyber City - Synthwave Code Beat",
             is_active=True,
         )
 
@@ -49,6 +51,8 @@ class RapidQuizAPITests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 1)
         self.assertEqual(response.data[0]["slug"], "yazilim")
+        self.assertEqual(response.data[0]["music_url"], "https://assets.mixkit.co/music/preview/mixkit-cyber-city-110.mp3")
+        self.assertEqual(response.data[0]["music_title"], "Cyber City - Synthwave Code Beat")
         self.assertEqual(response.data[0]["question_count"], 2)
 
     def test_category_questions_no_cheat(self):
@@ -57,6 +61,8 @@ class RapidQuizAPITests(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["total_questions"], 2)
+        self.assertEqual(response.data["music_url"], "https://assets.mixkit.co/music/preview/mixkit-cyber-city-110.mp3")
+        self.assertEqual(response.data["music_title"], "Cyber City - Synthwave Code Beat")
         questions = response.data["questions"]
         self.assertEqual(len(questions), 2)
 

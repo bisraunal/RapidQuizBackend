@@ -39,6 +39,8 @@ class CategoryQuestionsView(APIView):
             "category_slug": category.slug,
             "icon": category.icon,
             "color_theme": category.color_theme,
+            "music_url": category.music_url,
+            "music_title": category.music_title,
             "time_per_question": 5,
             "total_questions": len(question_serializer.data),
             "questions": question_serializer.data,
