@@ -12,6 +12,36 @@ from .serializers import (
 )
 
 
+class ApiRootView(APIView):
+    """
+    GET / and /api/v1/
+    Rapid Quiz API Root overview & available endpoints
+    """
+    def get(self, request):
+        return Response({
+            "project": "Rapid Quiz API",
+            "version": "v1",
+            "status": "running",
+            "endpoints": {
+                "categories": request.build_absolute_uri("/api/v1/categories/"),
+                "category_questions_example": request.build_absolute_uri("/api/v1/categories/ascilik/questions/"),
+                "quiz_submit": request.build_absolute_uri("/api/v1/quiz/submit/"),
+                "leaderboard": request.build_absolute_uri("/api/v1/leaderboard/?category=ascilik"),
+                "global_leaderboard": request.build_absolute_uri("/api/v1/leaderboard/global/"),
+                "admin_panel": request.build_absolute_uri("/admin/"),
+            },
+            "available_categories": [
+                {"name": "Aşçılık", "slug": "ascilik"},
+                {"name": "Yazılım", "slug": "yazilim"},
+                {"name": "Yapay Zeka", "slug": "yapay-zeka"},
+                {"name": "Bilgisayar Mühendisliği", "slug": "bilgisayar-muhendisligi"},
+                {"name": "Ülkeler", "slug": "ulkeler"},
+                {"name": "Fizik", "slug": "fizik"},
+                {"name": "Futbol", "slug": "futbol"},
+            ]
+        }, status=status.HTTP_200_OK)
+
+
 class CategoryListView(APIView):
     """
     GET /api/v1/categories/
