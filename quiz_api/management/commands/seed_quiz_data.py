@@ -465,8 +465,8 @@ CATEGORIES_DATA = [
         ]
     },
     {
-        "name": "Bilgisayar Mühendisliği",
-        "slug": "bilgisayar-muhendisligi",
+        "name": "Teknoloji",
+        "slug": "teknoloji",
         "icon": "Cpu",
         "color_theme": "blue",
         "music_url": "https://assets.mixkit.co/music/preview/mixkit-game-level-music-689.mp3",
@@ -1613,6 +1613,466 @@ CATEGORIES_DATA = [
                 ]
             }
         ]
+    },
+    {
+        "name": "Sinema",
+        "slug": "sinema",
+        "icon": "Clapperboard",
+        "color_theme": "purple",
+        "music_url": "https://assets.mixkit.co/music/preview/mixkit-cinematic-mystery-suspense-hum-2852.mp3",
+        "music_title": "Hollywood Mystery - Cinematic Suspense",
+        "questions": [
+            {
+                "text": "The Godfather (Baba) filminin yönetmeni kimdir?",
+                "points": 10,
+                "order": 1,
+                "choices": [
+                    {"text": "Francis Ford Coppola", "is_correct": True},
+                    {"text": "Martin Scorsese", "is_correct": False},
+                    {"text": "Steven Spielberg", "is_correct": False},
+                    {"text": "Stanley Kubrick", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Sinema tarihinde 'En İyi Film' dahil 11 dalda Oscar kazanan ilk film hangisidir?",
+                "points": 10,
+                "order": 2,
+                "choices": [
+                    {"text": "Ben-Hur", "is_correct": True},
+                    {"text": "Titanic", "is_correct": False},
+                    {"text": "Yüzüklerin Efendisi: Kralın Dönüşü", "is_correct": False},
+                    {"text": "La La Land", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Matrix filminde Keanu Reeves'in canlandırdığı Neo karakterinin gerçek adı nedir?",
+                "points": 10,
+                "order": 3,
+                "choices": [
+                    {"text": "Thomas Anderson", "is_correct": True},
+                    {"text": "John Wick", "is_correct": False},
+                    {"text": "Miles Morales", "is_correct": False},
+                    {"text": "Arthur Dent", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Christopher Nolan'ın rüya içinde rüya katmanlarını konu alan ünlü bilimkurgu filmi hangisidir?",
+                "points": 10,
+                "order": 4,
+                "choices": [
+                    {"text": "Inception", "is_correct": True},
+                    {"text": "Interstellar", "is_correct": False},
+                    {"text": "Tenet", "is_correct": False},
+                    {"text": "Memento", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Yüzüklerin Efendisi serisinde 'Tek Yüzük' hangi volkanik dağda eritilerek yok edilir?",
+                "points": 10,
+                "order": 5,
+                "choices": [
+                    {"text": "Hüküm Dağı (Mount Doom)", "is_correct": True},
+                    {"text": "Yalnız Dağ (Erebor)", "is_correct": False},
+                    {"text": "Puslu Dağlar", "is_correct": False},
+                    {"text": "Karanlık Dağ", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Pulp Fiction (Ucuz Roman) ve Kill Bill filmlerinin kült yönetmeni kimdir?",
+                "points": 10,
+                "order": 6,
+                "choices": [
+                    {"text": "Quentin Tarantino", "is_correct": True},
+                    {"text": "David Fincher", "is_correct": False},
+                    {"text": "Guy Ritchie", "is_correct": False},
+                    {"text": "Wes Anderson", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Yeşilçam klasiği 'Hababam Sınıfı' serisinde İnek Şaban karakterini canlandıran usta oyuncu kimdir?",
+                "points": 10,
+                "order": 7,
+                "choices": [
+                    {"text": "Kemal Sunal", "is_correct": True},
+                    {"text": "Şener Şen", "is_correct": False},
+                    {"text": "Halit Akçatepe", "is_correct": False},
+                    {"text": "Münir Özkul", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Fight Club (Dövüş Kulübü) filminin birinci kuralı nedir?",
+                "points": 10,
+                "order": 8,
+                "choices": [
+                    {"text": "Dövüş Kulübü hakkında asla konuşmamak", "is_correct": True},
+                    {"text": "Her dövüşe tek kişi katılmak", "is_correct": False},
+                    {"text": "Hakem kararlarına itiraz etmemek", "is_correct": False},
+                    {"text": "Salı günleri antrenman yapmak", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Yıldız Savaşları (Star Wars) serisinde Luke Skywalker ve Leia Organa'nın babası kimdir?",
+                "points": 10,
+                "order": 9,
+                "choices": [
+                    {"text": "Darth Vader (Anakin Skywalker)", "is_correct": True},
+                    {"text": "Obi-Wan Kenobi", "is_correct": False},
+                    {"text": "Han Solo", "is_correct": False},
+                    {"text": "İmparator Palpatine", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Breaking Bad dizisinde Walter White'ın metamfetamin üretirken kullandığı takma ad nedir?",
+                "points": 10,
+                "order": 10,
+                "choices": [
+                    {"text": "Heisenberg", "is_correct": True},
+                    {"text": "Ozymandias", "is_correct": False},
+                    {"text": "Cap'n Cook", "is_correct": False},
+                    {"text": "Saul Goodman", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Forrest Gump filminde ünlü repliğe göre hayat neye benzer?",
+                "points": 10,
+                "order": 11,
+                "choices": [
+                    {"text": "Bir kutu çikolataya", "is_correct": True},
+                    {"text": "Bir maratona", "is_correct": False},
+                    {"text": "Bir kuş tüyüne", "is_correct": False},
+                    {"text": "Hızlı akan bir nehre", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Harry Potter serisinde Lord Voldemort'un gerçek doğum adı nedir?",
+                "points": 10,
+                "order": 12,
+                "choices": [
+                    {"text": "Tom Marvolo Riddle", "is_correct": True},
+                    {"text": "Severus Snape", "is_correct": False},
+                    {"text": "Lucius Malfoy", "is_correct": False},
+                    {"text": "Gellert Grindelwald", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Schindler'in Listesi ve Jurassic Park filmlerinin efsanevi yönetmeni kimdir?",
+                "points": 10,
+                "order": 13,
+                "choices": [
+                    {"text": "Steven Spielberg", "is_correct": True},
+                    {"text": "James Cameron", "is_correct": False},
+                    {"text": "Ridley Scott", "is_correct": False},
+                    {"text": "George Lucas", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Interstellar filminde astronot Cooper'ın kızı Murph'e bıraktığı ve kuantum verisini mors alfabesiyle ilettiği eşya nedir?",
+                "points": 10,
+                "order": 14,
+                "choices": [
+                    {"text": "Kol saati", "is_correct": True},
+                    {"text": "Müzik kutusu", "is_correct": False},
+                    {"text": "Pusula", "is_correct": False},
+                    {"text": "Teleskop", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Titanik filminde Rose'un taktığı ve geminin batmasıyla okyanusa karışan ünlü mavi kolyenin adı nedir?",
+                "points": 10,
+                "order": 15,
+                "choices": [
+                    {"text": "Okyanusun Kalbi (Heart of the Ocean)", "is_correct": True},
+                    {"text": "Gecenin Yıldızı", "is_correct": False},
+                    {"text": "Mavi Umut", "is_correct": False},
+                    {"text": "Atlantik İncisi", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Kara Şövalye (The Dark Knight, 2008) filmindeki unutulmaz Joker performansıyla Oscar kazanan aktör kimdir?",
+                "points": 10,
+                "order": 16,
+                "choices": [
+                    {"text": "Heath Ledger", "is_correct": True},
+                    {"text": "Joaquin Phoenix", "is_correct": False},
+                    {"text": "Jack Nicholson", "is_correct": False},
+                    {"text": "Christian Bale", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Game of Thrones dizisinde Demir Taht'a ev sahipliği yapan başkentin adı nedir?",
+                "points": 10,
+                "order": 17,
+                "choices": [
+                    {"text": "King's Landing (Kralın Şehri)", "is_correct": True},
+                    {"text": "Winterfell (Kıştepesi)", "is_correct": False},
+                    {"text": "Casterly Rock", "is_correct": False},
+                    {"text": "Braavos", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Nuri Bilge Ceylan hangi filmiyle 2014 Cannes Film Festivali'nde Altın Palmiye ödülünü kazanmıştır?",
+                "points": 10,
+                "order": 18,
+                "choices": [
+                    {"text": "Kış Uykusu", "is_correct": True},
+                    {"text": "Bir Zamanlar Anadolu'da", "is_correct": False},
+                    {"text": "Uzak", "is_correct": False},
+                    {"text": "Ahlat Ağacı", "is_correct": False}
+                ]
+            },
+            {
+                "text": "The Shawshank Redemption (Esaretin Bedeli) filminde Andy Dufresne hapishaneden kaçmak için hangi aleti kullanmıştır?",
+                "points": 10,
+                "order": 19,
+                "choices": [
+                    {"text": "Küçük bir kaya çekici", "is_correct": True},
+                    {"text": "Yemek kaşığı", "is_correct": False},
+                    {"text": "Tornavida", "is_correct": False},
+                    {"text": "Demir testeresi", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Geleceğe Dönüş (Back to the Future) filminde zamanda yolculuk yapan ikonik arabanın modeli nedir?",
+                "points": 10,
+                "order": 20,
+                "choices": [
+                    {"text": "DeLorean DMC-12", "is_correct": True},
+                    {"text": "Ford Mustang", "is_correct": False},
+                    {"text": "Chevrolet Corvette", "is_correct": False},
+                    {"text": "Pontiac Trans Am", "is_correct": False}
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Tarih",
+        "slug": "tarih",
+        "icon": "Landmark",
+        "color_theme": "amber",
+        "music_url": "https://assets.mixkit.co/music/preview/mixkit-ancient-whispers-432.mp3",
+        "music_title": "Ancient Empires - Historical Echoes",
+        "questions": [
+            {
+                "text": "Türkiye Cumhuriyeti hangi yılda ilan edilmiştir?",
+                "points": 10,
+                "order": 1,
+                "choices": [
+                    {"text": "1923", "is_correct": True},
+                    {"text": "1920", "is_correct": False},
+                    {"text": "1922", "is_correct": False},
+                    {"text": "1924", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Osmanlı Devleti'nin kurucusu kabul edilen ilk bey kimdir?",
+                "points": 10,
+                "order": 2,
+                "choices": [
+                    {"text": "Osman Gazi", "is_correct": True},
+                    {"text": "Orhan Gazi", "is_correct": False},
+                    {"text": "Ertuğrul Gazi", "is_correct": False},
+                    {"text": "I. Murad", "is_correct": False}
+                ]
+            },
+            {
+                "text": "İstanbul hangi tarihte Fatih Sultan Mehmet tarafından fethedilmiştir?",
+                "points": 10,
+                "order": 3,
+                "choices": [
+                    {"text": "29 Mayıs 1453", "is_correct": True},
+                    {"text": "23 Nisan 1453", "is_correct": False},
+                    {"text": "29 Ekim 1453", "is_correct": False},
+                    {"text": "15 Temmuz 1453", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Tarihteki en eski kapsamlı yazılı kanunlardan olan 'Göze göz, dişe diş' ilkesiyle ünlü kanunlar kime aittir?",
+                "points": 10,
+                "order": 4,
+                "choices": [
+                    {"text": "Hammurabi Kanunları (Babil)", "is_correct": True},
+                    {"text": "Solon Kanunları (Atina)", "is_correct": False},
+                    {"text": "On İki Levha Kanunları (Roma)", "is_correct": False},
+                    {"text": "Cengiz Han Yasaları", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Antik Mısır'da inşa edilen ve Dünyanın Yedi Harikası arasından günümüze ulaşan tek yapı hangisidir?",
+                "points": 10,
+                "order": 5,
+                "choices": [
+                    {"text": "Keops Piramidi (Gize)", "is_correct": True},
+                    {"text": "İskenderiye Feneri", "is_correct": False},
+                    {"text": "Babil'in Asma Bahçeleri", "is_correct": False},
+                    {"text": "Rodos Heykeli", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Avrupa ve dünya tarihini kökten değiştiren Fransız İhtilali hangi yılda gerçekleşmiştir?",
+                "points": 10,
+                "order": 6,
+                "choices": [
+                    {"text": "1789", "is_correct": True},
+                    {"text": "1776", "is_correct": False},
+                    {"text": "1804", "is_correct": False},
+                    {"text": "1815", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Kurtuluş Savaşı'nda Batı Cephesi Komutanlığı yapan ve Türkiye'nin 2. Cumhurbaşkanı olan devlet adamı kimdir?",
+                "points": 10,
+                "order": 7,
+                "choices": [
+                    {"text": "İsmet İnönü", "is_correct": True},
+                    {"text": "Fevzi Çakmak", "is_correct": False},
+                    {"text": "Kazım Karabekir", "is_correct": False},
+                    {"text": "Refet Bele", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Kralın yetkilerini sınırlandıran ilk anayasal belge sayılan Magna Carta hangi ülkede ve yılda imzalanmıştır?",
+                "points": 10,
+                "order": 8,
+                "choices": [
+                    {"text": "1215 - İngiltere", "is_correct": True},
+                    {"text": "1492 - İspanya", "is_correct": False},
+                    {"text": "1789 - Fransa", "is_correct": False},
+                    {"text": "1776 - ABD", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Roma İmparatorluğu'nda M.Ö. 44 yılında suikast sonucu öldürülen ve 'Sen de mi Brütüs?' sözüyle hatırlanan lider kimdir?",
+                "points": 10,
+                "order": 9,
+                "choices": [
+                    {"text": "Jül Sezar (Julius Caesar)", "is_correct": True},
+                    {"text": "Marcus Antonius", "is_correct": False},
+                    {"text": "Augustus", "is_correct": False},
+                    {"text": "Neron", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Tarihte madeni parayı ilk basan ve kullanan Anadolu uygarlığı hangisidir?",
+                "points": 10,
+                "order": 10,
+                "choices": [
+                    {"text": "Lidyalılar", "is_correct": True},
+                    {"text": "Hititler", "is_correct": False},
+                    {"text": "Frigler", "is_correct": False},
+                    {"text": "Urartular", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Osmanlı Devleti'nde 46 yıl boyunca en uzun süre tahtta kalan padişah kimdir?",
+                "points": 10,
+                "order": 11,
+                "choices": [
+                    {"text": "Kanuni Sultan Süleyman", "is_correct": True},
+                    {"text": "Fatih Sultan Mehmet", "is_correct": False},
+                    {"text": "II. Abdülhamid", "is_correct": False},
+                    {"text": "Yavuz Sultan Selim", "is_correct": False}
+                ]
+            },
+            {
+                "text": "I. Dünya Savaşı'nın ardından İtilaf Devletleri ile Almanya arasında imzalanan barış antlaşması hangisidir?",
+                "points": 10,
+                "order": 12,
+                "choices": [
+                    {"text": "Versay Antlaşması", "is_correct": True},
+                    {"text": "Sevr Antlaşması", "is_correct": False},
+                    {"text": "Lozan Antlaşması", "is_correct": False},
+                    {"text": "Brest-Litovsk Antlaşması", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Yunan mitolojisinde gökyüzü tanrısı ve Olympos'un kralı olan Zeus'un ana simgesi nedir?",
+                "points": 10,
+                "order": 13,
+                "choices": [
+                    {"text": "Şimşek / Yıldırım Demeti", "is_correct": True},
+                    {"text": "Üç Dişli Mızrak (Trident)", "is_correct": False},
+                    {"text": "Alevli Kılıç", "is_correct": False},
+                    {"text": "Kanatlı Miğfer", "is_correct": False}
+                ]
+            },
+            {
+                "text": "İpek Yolu hangi büyük coğrafyadan başlayıp Akdeniz ve Avrupa limanlarına uzanan tarihi ticaret yoludur?",
+                "points": 10,
+                "order": 14,
+                "choices": [
+                    {"text": "Çin", "is_correct": True},
+                    {"text": "Hindistan", "is_correct": False},
+                    {"text": "Mısır", "is_correct": False},
+                    {"text": "Japonya", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Malazgirt Meydan Muharebesi hangi yılda kazanılmış ve Türklere Anadolu'nun kapılarını ardına kadar açmıştır?",
+                "points": 10,
+                "order": 15,
+                "choices": [
+                    {"text": "1071", "is_correct": True},
+                    {"text": "1040", "is_correct": False},
+                    {"text": "1176", "is_correct": False},
+                    {"text": "1243", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Buhar makinesinin icadıyla Sanayi Devrimi ilk olarak 18. yüzyılda hangi ülkede başlamıştır?",
+                "points": 10,
+                "order": 16,
+                "choices": [
+                    {"text": "İngiltere", "is_correct": True},
+                    {"text": "Almanya", "is_correct": False},
+                    {"text": "Fransa", "is_correct": False},
+                    {"text": "Amerika Birleşik Devletleri", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Ayasofya ilk olarak 6. yüzyılda hangi Bizans (Doğu Roma) İmparatoru döneminde inşa ettirilmiştir?",
+                "points": 10,
+                "order": 17,
+                "choices": [
+                    {"text": "I. Justinianus", "is_correct": True},
+                    {"text": "Büyük Konstantin", "is_correct": False},
+                    {"text": "I. Theodosius", "is_correct": False},
+                    {"text": "Herakleios", "is_correct": False}
+                ]
+            },
+            {
+                "text": "1492 yılında İspanya bayrağı altında Atlantik Okyanusu'nu aşarak Amerika Kıtası'na ulaşan Cenevizli denizci kimdir?",
+                "points": 10,
+                "order": 18,
+                "choices": [
+                    {"text": "Kristof Kolomb", "is_correct": True},
+                    {"text": "Amerigo Vespucci", "is_correct": False},
+                    {"text": "Ferdinand Macellan", "is_correct": False},
+                    {"text": "Vasco da Gama", "is_correct": False}
+                ]
+            },
+            {
+                "text": "İlk Türk devletlerinde hükümdarın devleti yönetme yetkisinin Gök Tanrı tarafından verildiğine inanılan anlayışa ne ad verilir?",
+                "points": 10,
+                "order": 19,
+                "choices": [
+                    {"text": "Kut Anlayışı", "is_correct": True},
+                    {"text": "Töre", "is_correct": False},
+                    {"text": "Kurultay", "is_correct": False},
+                    {"text": "Balbal", "is_correct": False}
+                ]
+            },
+            {
+                "text": "Yunan mitolojisinde ateşi Olympos tanrılarından çalarak insanlığa armağan eden titan kimdir?",
+                "points": 10,
+                "order": 20,
+                "choices": [
+                    {"text": "Prometheus", "is_correct": True},
+                    {"text": "Atlas", "is_correct": False},
+                    {"text": "Kronos", "is_correct": False},
+                    {"text": "Epimetheus", "is_correct": False}
+                ]
+            }
+        ]
     }
 ]
 
@@ -1628,6 +2088,9 @@ class Command(BaseCommand):
         total_choices = 0
 
         with transaction.atomic():
+            # Clean up obsolete category slug replaced by teknoloji
+            Category.objects.filter(slug="bilgisayar-muhendisligi").delete()
+
             for cat_data in CATEGORIES_DATA:
                 category, created = Category.objects.update_or_create(
                     slug=cat_data["slug"],

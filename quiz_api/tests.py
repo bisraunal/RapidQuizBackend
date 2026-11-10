@@ -83,7 +83,7 @@ class RapidQuizAPITests(TestCase):
                 {
                     "question_id": str(self.q1.id),
                     "selected_choice_id": str(self.c1_correct.id),
-                    "time_taken": 2.0,  # 3.0s remaining -> speed_bonus = round(3.0 * 2) = 6 -> 16 pts
+                    "time_taken": 2.0,  # 8.0s remaining -> speed_bonus = round(8.0) = 8 -> 18 pts
                 },
                 {
                     "question_id": str(self.q2.id),
@@ -99,7 +99,7 @@ class RapidQuizAPITests(TestCase):
         self.assertEqual(response.data["correct_count"], 1)
         self.assertEqual(response.data["wrong_count"], 1)
         self.assertEqual(response.data["empty_count"], 0)
-        self.assertEqual(response.data["total_score"], 16)
+        self.assertEqual(response.data["total_score"], 18)
         self.assertEqual(response.data["rank"], 1)
         self.assertTrue(len(response.data["top_10"]) >= 1)
 

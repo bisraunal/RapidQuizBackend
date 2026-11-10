@@ -8,7 +8,7 @@
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-17%2B-336791?style=for-the-badge&logo=postgresql&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 
-**Hızlı düşünme, anlık refleks ve rekabet odaklı 5 saniyelik quiz platformunun RESTful API servisi.**
+**Hızlı düşünme, anlık refleks ve rekabet odaklı 10 saniyelik quiz platformunun RESTful API servisi.**
 
 [Canlı API](https://rapid-quiz-backend.onrender.com/api/v1/categories/) • [Frontend Reposu](https://github.com/bisraunal/RapidQuizFrontend)
 
@@ -22,10 +22,10 @@ Rapid Quiz Backend, mobil ve web istemcilerine yüksek performanslı, güvenli v
 
 ### Temel Özellikler
 * **Hile Korumalı Soru Teslimi:** Quiz esnasında doğru şıklar (`is_correct`) istemciye gönderilmez. Doğrulama sunucu tarafında yapılır.
-* **Dinamik Hız Bonusu Formülü:** Taban 10 puana ek olarak kalan süreye göre anlık hız puanı hesaplama (`Puan = 10 + (Kalan Süre * 2)`).
+* **Dinamik Hız Bonusu Formülü:** Taban 10 puana ek olarak kalan süreye göre anlık hız puanı hesaplama (`Puan = 10 + Kalan Süre`).
 * **Canlı Lider Tablosu (Top 10):** Kategori bazlı ve global lider tabloları.
 * **Eğitici Sonuç Analizi:** Quiz bitiminde detaylı doğru/yanlış ve süre analizi dökümü.
-* **6 Kategori ve 120 Soru (Seed Data):** Yazılım, Yapay Zeka, Bilgisayar Mühendisliği, Ülkeler, Fizik ve Futbol.
+* **9 Kategori ve 180 Soru (Seed Data):** Yazılım, Yapay Zeka, Teknoloji, Ülkeler, Fizik, Futbol, Aşçılık, Sinema ve Tarih.
 
 ---
 
@@ -50,7 +50,7 @@ flowchart TD
 
 | Metot | Uç Nokta | Açıklama |
 | :--- | :--- | :--- |
-| `GET` | `/api/v1/categories/` | Aktif 6 kategoriyi ve soru sayılarını listeler |
+| `GET` | `/api/v1/categories/` | Aktif 9 kategoriyi ve soru sayılarını listeler |
 | `GET` | `/api/v1/categories/{slug}/questions/` | Kategoriye ait 20 soruyu döner (`is_correct` gizlidir) |
 | `POST` | `/api/v1/quiz/submit/` | Cevapları doğrular, skoru hesaplar ve Top 10 ile döner |
 | `GET` | `/api/v1/leaderboard/?category={slug}` | Kategori bazlı Top 10 skorbordu |

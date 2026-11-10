@@ -92,7 +92,7 @@ class LeaderboardSerializer(serializers.ModelSerializer):
 class AnswerSubmissionSerializer(serializers.Serializer):
     question_id = serializers.UUIDField()
     selected_choice_id = serializers.UUIDField(allow_null=True, required=False)
-    time_taken = serializers.FloatField(min_value=0.0, max_value=30.0, default=5.0)
+    time_taken = serializers.FloatField(min_value=0.0, max_value=60.0, default=10.0)
 
 
 class QuizSubmissionSerializer(serializers.Serializer):

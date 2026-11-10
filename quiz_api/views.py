@@ -71,7 +71,7 @@ class CategoryQuestionsView(APIView):
             "color_theme": category.color_theme,
             "music_url": category.music_url,
             "music_title": category.music_title,
-            "time_per_question": 5,
+            "time_per_question": 10,
             "total_questions": len(question_serializer.data),
             "questions": question_serializer.data,
         }, status=status.HTTP_200_OK)
@@ -111,8 +111,8 @@ class QuizSubmitView(APIView):
         for ans in answers:
             q_id = ans["question_id"]
             selected_choice_id = ans.get("selected_choice_id")
-            time_taken = float(ans.get("time_taken", 5.0))
-            time_taken = max(0.0, min(5.0, time_taken))  # clamp between 0 and 5 seconds
+            time_taken = float(ans.get("time_taken", 10.0))
+            time_taken = max(0.0, min(10.0, time_taken))  # clamp between 0 and 10 seconds
             total_time_taken += time_taken
 
             question = questions_map.get(q_id)
@@ -138,9 +138,9 @@ class QuizSubmitView(APIView):
             elif correct_choice and str(selected_choice_id) == correct_choice_id:
                 is_correct = True
                 correct_count += 1
-                # Base 10 points + speed bonus: up to 10 extra points based on remaining time (5 - time_taken) * 2
-                remaining_time = max(0.0, 5.0 - time_taken)
-                speed_bonus = int(round(remaining_time * 2))
+                # Base 10 points + speed bonus: up to 10 extra points based on remaining time (10 - time_taken)
+                remaining_time = max(0.0, 10.0 - time_taken)
+                speed_bonus = int(round(remaining_time))
                 earned_points = question.points + speed_bonus
                 total_score += earned_points
             else:
