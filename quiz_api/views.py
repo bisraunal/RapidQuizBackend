@@ -26,6 +26,7 @@ class ApiRootView(APIView):
                 "categories": request.build_absolute_uri("/api/v1/categories/"),
                 "category_questions_example": request.build_absolute_uri("/api/v1/categories/ascilik/questions/"),
                 "quiz_submit": request.build_absolute_uri("/api/v1/quiz/submit/"),
+                "generate_ai_quiz": request.build_absolute_uri("/api/v1/quiz/generate-ai/"),
                 "leaderboard": request.build_absolute_uri("/api/v1/leaderboard/?category=ascilik"),
                 "global_leaderboard": request.build_absolute_uri("/api/v1/leaderboard/global/"),
                 "admin_panel": request.build_absolute_uri("/admin/"),
@@ -247,3 +248,22 @@ class GlobalLeaderboardView(APIView):
             "category_slug": "global",
             "leaderboard": serializer.data,
         }, status=status.HTTP_200_OK)
+
+
+class GenerateAiQuizView(APIView):
+    """
+    POST /api/v1/quiz/generate-ai/
+    Generates 5 reflex questions for any topic using Gemini AI.
+    """
+    def post(self, request):
+        topic = request.data.get("topic", "").strip()
+        if not topic:
+            return Response(
+                {"error": "Lütfen bir quiz konusu belirtin."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        from .services.ai_generator import generate_ai_quiz
+        quiz_data = generate_ai_quiz(topic)
+        return Response(quiz_data, status=status.HTTP_200_OK)
+

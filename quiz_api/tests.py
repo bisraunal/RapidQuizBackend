@@ -132,3 +132,18 @@ class RapidQuizAPITests(TestCase):
         global_resp = self.client.get(global_url)
         self.assertEqual(global_resp.status_code, status.HTTP_200_OK)
         self.assertEqual(len(global_resp.data["leaderboard"]), 2)
+
+    def test_generate_ai_quiz(self):
+        """Test POST /api/v1/quiz/generate-ai/"""
+        url = reverse("quiz_api:quiz-generate-ai")
+        response = self.client.post(url, {"topic": "Kuantum Fiziği"}, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["total_questions"], 5)
+        self.assertTrue(len(response.data["questions"]) == 5)
+        self.assertEqual(response.data["time_per_question"], 10)
+        # Verify choices have no is_correct
+        for q in response.data["questions"]:
+            self.assertEqual(len(q["choices"]), 4)
+            for c in q["choices"]:
+                self.assertNotIn("is_correct", c)
+
