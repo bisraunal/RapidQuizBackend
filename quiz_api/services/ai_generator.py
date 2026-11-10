@@ -26,6 +26,7 @@ def generate_ai_quiz(topic: str):
 
     api_key = os.environ.get("GEMINI_API_KEY", "").strip()
     quiz_data = None
+    last_api_error = None
 
     # --- 1. Real Gemini API Generation ---
     if api_key:
@@ -33,7 +34,7 @@ def generate_ai_quiz(topic: str):
             from google import genai
             from google.genai import types
 
-            client = genai.Client(api_key=api_key)
+            client = genai.Client(api_key=api_key, http_options={"timeout": 25000})
             prompt = f"""
 Sen uzman bir bilgi yarışması soru yazarısın.
 Konu: "{topic_clean}"
@@ -62,30 +63,53 @@ KESİN KURALLAR:
   ]
 }}
 """
-            response = client.models.generate_content(
-                model="gemini-2.5-flash",
-                contents=prompt,
-                config=types.GenerateContentConfig(
-                    response_mime_type="application/json",
-                    temperature=0.7,
-                ),
-            )
-            quiz_data = json.loads(response.text)
+            models_to_try = [
+                "gemini-3.5-flash-lite",
+                "gemini-3.5-flash",
+                "gemini-3.8-flash",
+                "gemini-2.5-flash",
+            ]
+            for model_name in models_to_try:
+                try:
+                    response = client.models.generate_content(
+                        model=model_name,
+                        contents=prompt,
+                        config=types.GenerateContentConfig(
+                            response_mime_type="application/json",
+                            temperature=0.7,
+                        ),
+                    )
+                    parsed = json.loads(response.text)
+                    if parsed and "questions" in parsed and len(parsed["questions"]) >= 5:
+                        quiz_data = parsed
+                        break
+                except Exception as m_err:
+                    last_api_error = str(m_err)
+                    continue
         except Exception as e:
             print(f"[AI Generator] Gemini API call failed: {e}")
+            last_api_error = str(e)
             quiz_data = None
 
     # --- 2. Curated Domain Knowledge Base ---
     if not quiz_data or "questions" not in quiz_data or len(quiz_data["questions"]) < 5:
-        quiz_data = _get_curated_knowledge_bank(topic_clean)
+        curated = _get_curated_knowledge_bank(topic_clean)
+        if curated:
+            quiz_data = curated
 
-    # --- 3. If Still No Questions (Unknown topic & No API Key) ---
-    if not quiz_data:
-        raise ValueError(
-            f"'{topic_clean}' konusu için canlı yapay zeka üretimi yapmak üzere "
-            "Backend'de GEMINI_API_KEY tanımlanmalıdır. Lütfen önerilen konulardan birini seçin "
-            "veya .env dosyasına Gemini API anahtarınızı ekleyin."
-        )
+    # --- 3. If Still No Questions (Unknown topic & No API Key or API error) ---
+    if not quiz_data or "questions" not in quiz_data or len(quiz_data["questions"]) < 5:
+        if last_api_error:
+            raise ValueError(
+                f"Gemini API ile soru üretilirken hata oluştu: {last_api_error}. "
+                "Lütfen API anahtarınızı veya internet bağlantınızı kontrol edin."
+            )
+        else:
+            raise ValueError(
+                f"'{topic_clean}' konusu için canlı yapay zeka üretimi yapmak üzere "
+                "Backend'de GEMINI_API_KEY tanımlanmalıdır. Lütfen önerilen konulardan birini seçin "
+                "veya .env dosyasına Gemini API anahtarınızı ekleyin."
+            )
 
     # Save to Database
     category_slug = f"ai-{turkish_slugify(topic_clean)[:30]}"
