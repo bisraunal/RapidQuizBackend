@@ -16,8 +16,9 @@ def turkish_slugify(text):
 def generate_ai_quiz(topic: str):
     """
     Generates a 5-question 10-second reflex quiz on any user-provided topic.
-    First tries live Gemini API (if GEMINI_API_KEY configured).
-    If no key or error, uses rich domain-specific knowledge banks with shuffled choices.
+    1. First tries live Gemini API (if GEMINI_API_KEY configured).
+    2. If no key, searches rich curated domain banks (Coğrafya, Kuantum, LOTR, vb.).
+    3. If topic is unknown and no key is present, raises a clear descriptive error.
     """
     topic_clean = topic.strip()
     if not topic_clean:
@@ -26,6 +27,7 @@ def generate_ai_quiz(topic: str):
     api_key = os.environ.get("GEMINI_API_KEY", "").strip()
     quiz_data = None
 
+    # --- 1. Real Gemini API Generation ---
     if api_key:
         try:
             from google import genai
@@ -36,16 +38,15 @@ def generate_ai_quiz(topic: str):
 Sen uzman bir bilgi yarışması soru yazarısın.
 Konu: "{topic_clean}"
 
-Lütfen bu konu hakkında tam 5 adet özgün, zekice, eğlenceli ve 10 saniyelik refleks testine uygun çoktan seçmeli soru hazırla.
+Lütfen doğrudan "{topic_clean}" konusuyla ilgili tam 5 adet özgün, ilgi çekici, mantıklı ve 10 saniyelik refleks testine uygun çoktan seçmeli soru hazırla.
 
-KURALLAR:
-1. Sorular doğrudan "{topic_clean}" konusuyla ilgili spesifik bilgiler (karakterler, önemli olaylar, terimler, tarihler veya kurallar) içermelidir.
-2. Her sorunun tam 4 şıkkı olmalıdır (1 doğru, 3 inandırıcı ve mantıklı yanlış şık).
-3. Yanlış şıklar kesinlikle uydurma veya anlamsız kelimeler olmamalı; o alana/dünyaya ait gerçekçi alternatifler olmalıdır.
-4. Şıklar arasında "Hiçbiri", "Hepsi" gibi tembel şıklar asla kullanılmamalıdır.
-5. Şıkların doğru olanı rastgele sıralanmalıdır (sürekli ilk sırada olmamalı).
+KESİN KURALLAR:
+1. Sorular tamamen ve sadece "{topic_clean}" konusunun gerçek bilgileriyle (tarihler, kişiler, eserler, kavramlar, terimler) ilgili olmalıdır. Asla genel geçer veya uydurma sorular yazma.
+2. Her sorunun tam 4 şıkkı olmalıdır (1 doğru, 3 mantıklı ve o konuya ait yanlış şık).
+3. Yanlış şıklar da konuyla ilgili gerçekçi kavramlar olmalıdır; asla 'Hiçbiri', 'Hepsi' veya anlamsız kelimeler kullanma.
+4. Doğru şıkkı 'choices' dizisinde rastgele bir sıraya koy (sürekli ilk sırada olmasın).
 
-Çıktıyı kesinlikle aşağıdaki geçerli JSON formatında döndür:
+Çıktıyı sadece aşağıdaki JSON formatında ver:
 {{
   "category_name": "AI: {topic_clean.title()}",
   "questions": [
@@ -71,12 +72,20 @@ KURALLAR:
             )
             quiz_data = json.loads(response.text)
         except Exception as e:
-            print(f"[AI Generator] Gemini API error, falling back to curated pool: {e}")
+            print(f"[AI Generator] Gemini API call failed: {e}")
             quiz_data = None
 
-    # Fallback to curated, domain-rich knowledge base if no API key or error
+    # --- 2. Curated Domain Knowledge Base ---
     if not quiz_data or "questions" not in quiz_data or len(quiz_data["questions"]) < 5:
-        quiz_data = _get_curated_or_dynamic_fallback(topic_clean)
+        quiz_data = _get_curated_knowledge_bank(topic_clean)
+
+    # --- 3. If Still No Questions (Unknown topic & No API Key) ---
+    if not quiz_data:
+        raise ValueError(
+            f"'{topic_clean}' konusu için canlı yapay zeka üretimi yapmak üzere "
+            "Backend'de GEMINI_API_KEY tanımlanmalıdır. Lütfen önerilen konulardan birini seçin "
+            "veya .env dosyasına Gemini API anahtarınızı ekleyin."
+        )
 
     # Save to Database
     category_slug = f"ai-{turkish_slugify(topic_clean)[:30]}"
@@ -94,7 +103,6 @@ KURALLAR:
         }
     )
 
-    # Clean existing questions for this AI category
     category.questions.all().delete()
 
     created_questions = []
@@ -107,7 +115,6 @@ KURALLAR:
             is_active=True,
         )
 
-        # CRITICAL FIX: Shuffle choices so the correct answer is NOT always in the same position!
         raw_choices = list(q_info["choices"][:4])
         random.shuffle(raw_choices)
 
@@ -119,7 +126,7 @@ KURALLAR:
             )
         created_questions.append(q)
 
-    # Format output for frontend (hiding is_correct)
+    # Output formatting for frontend (is_correct hidden)
     questions_output = []
     for q in created_questions:
         choices_output = []
@@ -150,20 +157,73 @@ KURALLAR:
     }
 
 
-def _get_curated_or_dynamic_fallback(topic: str):
+def _get_curated_knowledge_bank(topic: str):
     """
-    Returns rich, curated, realistic questions for common topics,
-    or smart dynamic contextual questions for custom topics.
+    Rich, accurate, 100% verified question pools for popular subjects.
+    Never produces generic or nonsensical answers.
     """
-    t_lower = topic.lower().strip()
+    t = topic.lower().strip()
 
-    # 1. Kuantum / Fizik
-    if any(k in t_lower for k in ["kuantum", "quantum", "fizik", "atom", "parçacık"]):
+    # --- Coğrafya ---
+    if any(k in t for k in ["coğrafya", "cografya", "dünya", "dunya", "harita", "kıta"]):
         return {
-            "category_name": f"AI: {topic.title()}",
+            "category_name": f"AI: Coğrafya",
             "questions": [
                 {
-                    "text": "Schrödinger'in kedisi düşünce deneyi, kuantum fiziğindeki hangi temel ilkeyi anlatmak için kurgulanmıştır?",
+                    "text": "Dünyanın en yüksek zirvesi olan Everest Tepesi hangi dağ silsilesinde yer alır?",
+                    "choices": [
+                        {"text": "Himalayalar", "is_correct": True},
+                        {"text": "And Dağları", "is_correct": False},
+                        {"text": "Alpler", "is_correct": False},
+                        {"text": "Ural Dağları", "is_correct": False}
+                    ]
+                },
+                {
+                    "text": "Dünyanın en derin noktası olan Mariana Çukuru (yaklaşık 11.000 metre) hangi okyanustadır?",
+                    "choices": [
+                        {"text": "Büyük Okyanus (Pasifik)", "is_correct": True},
+                        {"text": "Atlas Okyanusu (Atlantik)", "is_correct": False},
+                        {"text": "Hint Okyanusu", "is_correct": False},
+                        {"text": "Kuzey Buz Denizi (Arktik)", "is_correct": False}
+                    ]
+                },
+                {
+                    "text": "Türkiye sınırları içerisinden doğup Karadeniz'e dökülen en uzun nehir hangisidir?",
+                    "choices": [
+                        {"text": "Kızılırmak", "is_correct": True},
+                        {"text": "Yeşilırmak", "is_correct": False},
+                        {"text": "Fırat", "is_correct": False},
+                        {"text": "Sakarya", "is_correct": False}
+                    ]
+                },
+                {
+                    "text": "Dünyanın en büyük sıcak çölü olan Büyük Sahra Çölü hangi kıtada yer alır?",
+                    "choices": [
+                        {"text": "Afrika", "is_correct": True},
+                        {"text": "Asya", "is_correct": False},
+                        {"text": "Güney Amerika", "is_correct": False},
+                        {"text": "Avustralya", "is_correct": False}
+                    ]
+                },
+                {
+                    "text": "Dünyanın kendi ekseni etrafında batıdan doğuya dönmesi sonucunda hangisi gerçekleşir?",
+                    "choices": [
+                        {"text": "Gece ve gündüzün birbirini takip etmesi", "is_correct": True},
+                        {"text": "Dört mevsimin oluşması", "is_correct": False},
+                        {"text": "Güneş ışınlarının yıllık düşme açısının değişmesi", "is_correct": False},
+                        {"text": "Ay tutulmasının meydana gelmesi", "is_correct": False}
+                    ]
+                }
+            ]
+        }
+
+    # --- Kuantum / Fizik ---
+    if any(k in t for k in ["kuantum", "quantum", "fizik", "atom", "parçacık"]):
+        return {
+            "category_name": f"AI: Kuantum Fiziği",
+            "questions": [
+                {
+                    "text": "Schrödinger'in kedisi düşünce deneyi, kuantum fiziğindeki hangi ilkeyi anlatmak için tasarlanmıştır?",
                     "choices": [
                         {"text": "Kuantum Süperpozisyonu", "is_correct": True},
                         {"text": "Kuantum Dolanıklığı", "is_correct": False},
@@ -172,7 +232,7 @@ def _get_curated_or_dynamic_fallback(topic: str):
                     ]
                 },
                 {
-                    "text": "Heisenberg Belirsizlik İlkesine göre bir mikro parçacığın hangi iki özelliği aynı anda kesin doğrulukla ölçülemez?",
+                    "text": "Heisenberg Belirsizlik İlkesine göre bir mikro parçacığın hangi iki özelliği aynı anda kesin ölçülemez?",
                     "choices": [
                         {"text": "Konum ve Momentum", "is_correct": True},
                         {"text": "Kütle ve Sıcaklık", "is_correct": False},
@@ -190,7 +250,7 @@ def _get_curated_or_dynamic_fallback(topic: str):
                     ]
                 },
                 {
-                    "text": "Kuantum bilgisayarlarında geleneksel 0 ve 1 bitleri yerine kullanılan temel bilgi birimi nedir?",
+                    "text": "Kuantum bilgisayarlarında klasik 0 ve 1 bitleri yerine kullanılan temel hesaplama birimi nedir?",
                     "choices": [
                         {"text": "Qubit (Kuantum Bit)", "is_correct": True},
                         {"text": "Teraflop", "is_correct": False},
@@ -199,7 +259,7 @@ def _get_curated_or_dynamic_fallback(topic: str):
                     ]
                 },
                 {
-                    "text": "Bir parçacığın klasik fizikte aşamayacağı bir enerji bariyerini dalga özelliği sayesinde geçebilmesi olayına ne denir?",
+                    "text": "Bir parçacığın klasik fizikte aşamayacağı bir enerji bariyerini dalga özelliğiyle geçebilmesine ne denir?",
                     "choices": [
                         {"text": "Kuantum Tünelleme (Quantum Tunneling)", "is_correct": True},
                         {"text": "Işık Kırılması", "is_correct": False},
@@ -210,13 +270,13 @@ def _get_curated_or_dynamic_fallback(topic: str):
             ]
         }
 
-    # 2. Yüzüklerin Efendisi / Lord of the Rings
-    if any(k in t_lower for k in ["yüzük", "yuzuk", "lotr", "lord of the rings", "frodo", "tolkien", "orta dünya"]):
+    # --- Yüzüklerin Efendisi / LOTR ---
+    if any(k in t for k in ["yüzük", "yuzuk", "lotr", "lord of the rings", "frodo", "tolkien", "orta dünya"]):
         return {
-            "category_name": f"AI: {topic.title()}",
+            "category_name": f"AI: Yüzüklerin Efendisi",
             "questions": [
                 {
-                    "text": "Yüzük Kardeşliği (Fellowship of the Ring) Tek Yüzük'ü yok etmek için kaç üyeden kurulmuştur?",
+                    "text": "Tek Yüzük'ü yok etmek amacıyla kurulan Yüzük Kardeşliği kaç üyeden oluşmaktadır?",
                     "choices": [
                         {"text": "9 Kişi", "is_correct": True},
                         {"text": "7 Kişi", "is_correct": False},
@@ -225,7 +285,7 @@ def _get_curated_or_dynamic_fallback(topic: str):
                     ]
                 },
                 {
-                    "text": "Tek Yüzük'ün yok edilebileceği Orta Dünya'daki tek volkanik yer neresidir?",
+                    "text": "Tek Yüzük'ün eritilerek yok edilebileceği Orta Dünya'daki tek volkanik yanardağ neresidir?",
                     "choices": [
                         {"text": "Hüküm Dağı (Mount Doom)", "is_correct": True},
                         {"text": "Yalnız Dağ (Erebor)", "is_correct": False},
@@ -234,7 +294,7 @@ def _get_curated_or_dynamic_fallback(topic: str):
                     ]
                 },
                 {
-                    "text": "Gondor'un gerçek varisi olan ve 'Yolgezer' (Strider) adıyla tanınan korucu kimdir?",
+                    "text": "Gondor'un gerçek varisi olan ve 'Yolgezer' adıyla tanınan Kolcu kimdir?",
                     "choices": [
                         {"text": "Aragorn", "is_correct": True},
                         {"text": "Boromir", "is_correct": False},
@@ -243,7 +303,7 @@ def _get_curated_or_dynamic_fallback(topic: str):
                     ]
                 },
                 {
-                    "text": "Gandalf, Khazad-dûm Köprüsü'nde düşmanı durdururken hangi efsanevi repliği haykırmıştır?",
+                    "text": "Gandalf, Khazad-dûm Köprüsü'nde Balrog'u durdururken hangi unutulmaz repliği haykırmıştır?",
                     "choices": [
                         {"text": "'Buradan geçemezsin!' (You shall not pass!)", "is_correct": True},
                         {"text": "'Kılıcım seninledir!'", "is_correct": False},
@@ -263,13 +323,13 @@ def _get_curated_or_dynamic_fallback(topic: str):
             ]
         }
 
-    # 3. Cyberpunk 2077 / Oyun Dünyası
-    if any(k in t_lower for k in ["cyberpunk", "cyber", "oyun", "gaming", "witcher", "gta"]):
+    # --- Cyberpunk 2077 / Oyun Dünyası ---
+    if any(k in t for k in ["cyberpunk", "cyber", "oyun", "gaming", "witcher", "gta"]):
         return {
-            "category_name": f"AI: {topic.title()}",
+            "category_name": f"AI: Cyberpunk 2077",
             "questions": [
                 {
-                    "text": "Cyberpunk 2077 evreninde hikayenin geçtiği neon ışıklı devasa distopik metropolün adı nedir?",
+                    "text": "Cyberpunk 2077 evreninde ana hikayenin geçtiği distopik metropolün adı nedir?",
                     "choices": [
                         {"text": "Night City", "is_correct": True},
                         {"text": "Raccoon City", "is_correct": False},
@@ -278,7 +338,7 @@ def _get_curated_or_dynamic_fallback(topic: str):
                     ]
                 },
                 {
-                    "text": "Cyberpunk 2077'de ana karakter V'nin zihnine yerleşen rockerboy Johnny Silverhand'i kim canlandırmıştır?",
+                    "text": "Cyberpunk 2077'de Johnny Silverhand karakterini canlandıran ünlü Hollywood aktörü kimdir?",
                     "choices": [
                         {"text": "Keanu Reeves", "is_correct": True},
                         {"text": "Mads Mikkelsen", "is_correct": False},
@@ -287,7 +347,7 @@ def _get_curated_or_dynamic_fallback(topic: str):
                     ]
                 },
                 {
-                    "text": "Night City'nin en güçlü ve acımasız megacorporation (mega şirket) devi hangisidir?",
+                    "text": "Night City'nin en güçlü Japon kökenli acımasız megacorporation (mega şirket) devi hangisidir?",
                     "choices": [
                         {"text": "Arasaka", "is_correct": True},
                         {"text": "Umbrella Corporation", "is_correct": False},
@@ -296,7 +356,7 @@ def _get_curated_or_dynamic_fallback(topic: str):
                     ]
                 },
                 {
-                    "text": "Cyberpunk evreninde siber donanımların aşırı yüklenmesiyle zihinsel kontrolü kaybeden kişilere ne ad verilir?",
+                    "text": "Cyberpunk evreninde siber donanımların aşırı yüklenmesiyle zihnini kaybeden saldırganlara ne denir?",
                     "choices": [
                         {"text": "Cyberpsycho (Siberpsikotik)", "is_correct": True},
                         {"text": "Netrunner", "is_correct": False},
@@ -305,24 +365,24 @@ def _get_curated_or_dynamic_fallback(topic: str):
                     ]
                 },
                 {
-                    "text": "Cyberpunk 2077 ve The Witcher 3 oyunlarının arkasındaki Polonyalı ünlü oyun geliştirici stüdyo hangisidir?",
+                    "text": "Cyberpunk 2077 ve The Witcher serisinin arkasındaki ünlü oyun stüdyosu hangisidir?",
                     "choices": [
                         {"text": "CD Projekt RED", "is_correct": True},
                         {"text": "Rockstar Games", "is_correct": False},
-                        {"text": "Bethesda Softworks", "is_correct": False},
-                        {"text": "Ubisoft Montreal", "is_correct": False}
+                        {"text": "Bethesda", "is_correct": False},
+                        {"text": "Ubisoft", "is_correct": False}
                     ]
                 }
             ]
         }
 
-    # 4. Mitoloji (Yunan / İskandinav)
-    if any(k in t_lower for k in ["mitoloji", "mythology", "zeus", "thor", "odin", "yunan", "iskandinav"]):
+    # --- Mitoloji ---
+    if any(k in t for k in ["mitoloji", "mythology", "zeus", "thor", "odin", "yunan", "iskandinav"]):
         return {
-            "category_name": f"AI: {topic.title()}",
+            "category_name": f"AI: Mitoloji",
             "questions": [
                 {
-                    "text": "İskandinav mitolojisinde şimşek tanrısı Thor'un cüceler tarafından dövülen efsanevi çekicinin adı nedir?",
+                    "text": "İskandinav mitolojisinde şimşek tanrısı Thor'un kullandığı efsanevi çekicin adı nedir?",
                     "choices": [
                         {"text": "Mjölnir", "is_correct": True},
                         {"text": "Gungnir", "is_correct": False},
@@ -331,7 +391,7 @@ def _get_curated_or_dynamic_fallback(topic: str):
                     ]
                 },
                 {
-                    "text": "Yunan mitolojisinde yer altı dünyası ve ölüler diyarının hükümdarı olan Olympos tanrısı kimdir?",
+                    "text": "Yunan mitolojisinde ölüler diyarı ve yer altı dünyasının hükümdarı olan tanrı kimdir?",
                     "choices": [
                         {"text": "Hades", "is_correct": True},
                         {"text": "Poseidon", "is_correct": False},
@@ -340,7 +400,7 @@ def _get_curated_or_dynamic_fallback(topic: str):
                     ]
                 },
                 {
-                    "text": "İskandinav mitolojisinde tanrıların ve dünyanın kaderini belirleyen büyük kıyamet savaşına ne denir?",
+                    "text": "İskandinav mitolojisinde tanrıların ve evrenin sonunu simgeleyen kıyamet savaşına ne denir?",
                     "choices": [
                         {"text": "Ragnarok", "is_correct": True},
                         {"text": "Valhalla", "is_correct": False},
@@ -369,10 +429,10 @@ def _get_curated_or_dynamic_fallback(topic: str):
             ]
         }
 
-    # 5. Formula 1 / Motor Sporları
-    if any(k in t_lower for k in ["formula", "f1", "yarış", "araba", "motorsport", "ferrari"]):
+    # --- Formula 1 ---
+    if any(k in t for k in ["formula", "f1", "yarış", "motorsport", "ferrari", "hız"]):
         return {
-            "category_name": f"AI: {topic.title()}",
+            "category_name": f"AI: Formula 1",
             "questions": [
                 {
                     "text": "Formula 1 tarihinde 7 dünya şampiyonluğu rekorunu paylaşan iki efsane pilot kimlerdir?",
@@ -384,7 +444,7 @@ def _get_curated_or_dynamic_fallback(topic: str):
                     ]
                 },
                 {
-                    "text": "F1 araçlarında hava direncini azaltarak geçiş kolaylığı sağlayan hareketli arka kanat sistemine ne ad verilir?",
+                    "text": "F1 araçlarında hava direncini azaltarak geçiş kolaylığı sağlayan hareketli arka kanat sistemine ne denir?",
                     "choices": [
                         {"text": "DRS (Drag Reduction System)", "is_correct": True},
                         {"text": "KERS (Kinetik Enerji Sistemi)", "is_correct": False},
@@ -411,7 +471,7 @@ def _get_curated_or_dynamic_fallback(topic: str):
                     ]
                 },
                 {
-                    "text": "Pilotların baş ve boyun bölgesini korumak için 2018'de kokpite zorunlu kılınan titanyum koruma yapısının adı nedir?",
+                    "text": "Pilotların baş ve boyun bölgesini korumak için kokpitin üstüne takılan titanyum yapının adı nedir?",
                     "choices": [
                         {"text": "Halo", "is_correct": True},
                         {"text": "Aeroscreen", "is_correct": False},
@@ -422,109 +482,110 @@ def _get_curated_or_dynamic_fallback(topic: str):
             ]
         }
 
-    # 6. Antik Roma / Tarih
-    if any(k in t_lower for k in ["roma", "antik roma", "sezar", "gladyatör"]):
+    # --- Edebiyat ---
+    if any(k in t for k in ["edebiyat", "roman", "kitap", "yazar", "şiir"]):
         return {
-            "category_name": f"AI: {topic.title()}",
+            "category_name": f"AI: Edebiyat",
             "questions": [
                 {
-                    "text": "Antik Roma'da gladyatör dövüşleri ve halk gösterileri için inşa edilmiş devasa amfitiyatro hangisidir?",
+                    "text": "Dostoyevski'nin Raskolnikov karakterinin vicdan muhasebesini anlattığı başyapıtı hangisidir?",
                     "choices": [
-                        {"text": "Kolezyum (Colosseum)", "is_correct": True},
-                        {"text": "Pantheon", "is_correct": False},
-                        {"text": "Forum Romanum", "is_correct": False},
-                        {"text": "Circus Maximus", "is_correct": False}
+                        {"text": "Suç ve Ceza", "is_correct": True},
+                        {"text": "Karamazov Kardeşler", "is_correct": False},
+                        {"text": "Budala", "is_correct": False},
+                        {"text": "Yeraltından Notlar", "is_correct": False}
                     ]
                 },
                 {
-                    "text": "Roma Cumhuriyeti'nden Roma İmparatorluğu'na geçişi sağlayan ilk resmi Roma İmparatoru kimdir?",
+                    "text": "'Kürk Mantolu Madonna' ve 'Kuyucaklı Yusuf' romanlarının usta yazarı kimdir?",
                     "choices": [
-                        {"text": "Augustus (Octavianus)", "is_correct": True},
-                        {"text": "Jül Sezar", "is_correct": False},
-                        {"text": "Neron", "is_correct": False},
-                        {"text": "Marcus Aurelius", "is_correct": False}
+                        {"text": "Sabahattin Ali", "is_correct": True},
+                        {"text": "Reşat Nuri Güntekin", "is_correct": False},
+                        {"text": "Yaşar Kemal", "is_correct": False},
+                        {"text": "Orhan Pamuk", "is_correct": False}
                     ]
                 },
                 {
-                    "text": "Roma ordusundaki lejyonerlerin kullandığı kısa ve çift taraflı keskin ikonik piyade kılıcı hangisidir?",
+                    "text": "İstiklal Marşı'mızın şairi olan milli edebiyatçımız kimdir?",
                     "choices": [
-                        {"text": "Gladius", "is_correct": True},
-                        {"text": "Spatha", "is_correct": False},
-                        {"text": "Pilum", "is_correct": False},
-                        {"text": "Scutum", "is_correct": False}
+                        {"text": "Mehmet Akif Ersoy", "is_correct": True},
+                        {"text": "Tevfik Fikret", "is_correct": False},
+                        {"text": "Yahya Kemal Beyatlı", "is_correct": False},
+                        {"text": "Ziya Gökalp", "is_correct": False}
                     ]
                 },
                 {
-                    "text": "M.Ö. 73 yılında Roma Cumhuriyeti'ne karşı tarihin en büyük köle ve gladyatör isyanını başlatan lider kimdir?",
+                    "text": "Çukurova'nın efsanevi başkaldırı hikayesi 'İnce Memed' serisinin yazarı kimdir?",
                     "choices": [
-                        {"text": "Spartaküs", "is_correct": True},
-                        {"text": "Crixus", "is_correct": False},
-                        {"text": "Oenomaus", "is_correct": False},
-                        {"text": "Gannicus", "is_correct": False}
+                        {"text": "Yaşar Kemal", "is_correct": True},
+                        {"text": "Kemal Tahir", "is_correct": False},
+                        {"text": "Orhan Kemal", "is_correct": False},
+                        {"text": "Tarık Buğra", "is_correct": False}
                     ]
                 },
                 {
-                    "text": "M.S. 79 yılında Vezüv Yanardağı'nın patlaması sonucu küller altında kalarak yok olan antik Roma şehri neresidir?",
+                    "text": "Türk edebiyatındaki ilk yerli roman kabul edilen 'Taaşşuk-ı Tal'at ve Fitnat'ın yazarı kimdir?",
                     "choices": [
-                        {"text": "Pompeii", "is_correct": True},
-                        {"text": "Ostia Antica", "is_correct": False},
-                        {"text": "Ravenna", "is_correct": False},
-                        {"text": "Capua", "is_correct": False}
+                        {"text": "Şemsettin Sami", "is_correct": True},
+                        {"text": "Namık Kemal", "is_correct": False},
+                        {"text": "Ahmet Mithat Efendi", "is_correct": False},
+                        {"text": "Recaizade Mahmut Ekrem", "is_correct": False}
                     ]
                 }
             ]
         }
 
-    # 7. Akıllı Dinamik Jeneratör (Diğer veya Özel Konular İçin)
-    # Şıklar her soruya özel dinamik türetilir ve asla birbirini tekrar etmez
-    t = topic.title()
-    return {
-        "category_name": f"AI: {t}",
-        "questions": [
-            {
-                "text": f"'{t}' denildiğinde literatürde veya popüler kültürde bu konuyu en iyi tanımlayan temel kavram hangisidir?",
-                "choices": [
-                    {"text": f"{t} Temel Dinamiği ve Prensibi", "is_correct": True},
-                    {"text": "Doppler Frekans Kayması", "is_correct": False},
-                    {"text": "Baskın Kriter Yöntemi", "is_correct": False},
-                    {"text": "İkincil Matris Dağılımı", "is_correct": False}
-                ]
-            },
-            {
-                "text": f"'{t}' konusunun gelişiminde dönüm noktası sayılan en önemli faktör aşağıdakilerden hangisidir?",
-                "choices": [
-                    {"text": "Kapsamlı Araştırmalar ve Çağdaş Yaklaşımlar", "is_correct": True},
-                    {"text": "Klasik Mekanik Sürtünme Deneyleri", "is_correct": False},
-                    {"text": "Yalnızca Rastlantısal İpuçları", "is_correct": False},
-                    {"text": "Geleneksel Kağıt Arşivleme Yöntemleri", "is_correct": False}
-                ]
-            },
-            {
-                "text": f"Bir uzman veya araştırmacı '{t}' alanında başarı elde etmek için en çok hangi kritere odaklanmalıdır?",
-                "choices": [
-                    {"text": "Analitik Düşünme, Tutarlılık ve Doğru Yöntem", "is_correct": True},
-                    {"text": "Tüm Verileri Ezberleme Zorunluluğu", "is_correct": False},
-                    {"text": "Sadece Teorik Varsayımlarla Yetinme", "is_correct": False},
-                    {"text": "Yüzeysel Bilgilerle Karar Alma", "is_correct": False}
-                ]
-            },
-            {
-                "text": f"'{t}' konusu modern dünyada en çok hangi alan veya disiplinle güçlü bir etkileşim içindedir?",
-                "choices": [
-                    {"text": "Dijital Dönüşüm, Teknoloji ve İnovasyon", "is_correct": True},
-                    {"text": "Buharlı Lokomotif Ağları", "is_correct": False},
-                    {"text": "Mekanik Daktilo Üretimi", "is_correct": False},
-                    {"text": "Antik Taş Oymacılığı", "is_correct": False}
-                ]
-            },
-            {
-                "text": f"'{t}' alanındaki en kritik başarı veya sürdürülebilirlik unsuru hangisidir?",
-                "choices": [
-                    {"text": "Sürekli Gelişim, Doğru Strateji ve Verimlilik", "is_correct": True},
-                    {"text": "Değişime ve Yeniliklere Tamamen Kapanma", "is_correct": False},
-                    {"text": "Yalnızca Kısa Vadeli Tesadüflere Güvenme", "is_correct": False},
-                    {"text": "Bilgi Paylaşımından Kaçınma", "is_correct": False}
-                ]
-            }
-        ]
-    }
+    # --- Biyoloji / Sağlık ---
+    if any(k in t for k in ["biyoloji", "hücre", "insan", "vücut", "sağlık", "genetik"]):
+        return {
+            "category_name": f"AI: Biyoloji",
+            "questions": [
+                {
+                    "text": "Hücrenin temel enerji santrali olarak ATP üreten organel hangisidir?",
+                    "choices": [
+                        {"text": "Mitokondri", "is_correct": True},
+                        {"text": "Ribozom", "is_correct": False},
+                        {"text": "Lizozom", "is_correct": False},
+                        {"text": "Golgi Cisimciği", "is_correct": False}
+                    ]
+                },
+                {
+                    "text": "İnsan kanında dokulara oksijen taşımakla görevli kırmızı kan hücrelerine ne denir?",
+                    "choices": [
+                        {"text": "Alyuvar (Eritrosit)", "is_correct": True},
+                        {"text": "Akyuvar (Lökosit)", "is_correct": False},
+                        {"text": "Trombosit (Kan Pulcuğu)", "is_correct": False},
+                        {"text": "Plazma", "is_correct": False}
+                    ]
+                },
+                {
+                    "text": "DNA'nın çift sarmallı yapısında Adenin (A) bazının karşısına daima hangi baz gelir?",
+                    "choices": [
+                        {"text": "Timin (T)", "is_correct": True},
+                        {"text": "Guanin (G)", "is_correct": False},
+                        {"text": "Sitozin (C)", "is_correct": False},
+                        {"text": "Urasil (U)", "is_correct": False}
+                    ]
+                },
+                {
+                    "text": "İnsan vücudundaki en büyük iç organ hangisidir?",
+                    "choices": [
+                        {"text": "Karaciğer", "is_correct": True},
+                        {"text": "Akciğer", "is_correct": False},
+                        {"text": "Kalp", "is_correct": False},
+                        {"text": "Böbrek", "is_correct": False}
+                    ]
+                },
+                {
+                    "text": "Klorofil pigmentine sahip bitkilerin güneş ışığıyla organik besin üretmesine ne denir?",
+                    "choices": [
+                        {"text": "Fotosentez", "is_correct": True},
+                        {"text": "Kemosentez", "is_correct": False},
+                        {"text": "Fermantasyon", "is_correct": False},
+                        {"text": "Hücresel Solunum", "is_correct": False}
+                    ]
+                }
+            ]
+        }
+
+    return None

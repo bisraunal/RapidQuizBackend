@@ -264,6 +264,14 @@ class GenerateAiQuizView(APIView):
             )
 
         from .services.ai_generator import generate_ai_quiz
-        quiz_data = generate_ai_quiz(topic)
-        return Response(quiz_data, status=status.HTTP_200_OK)
+        try:
+            quiz_data = generate_ai_quiz(topic)
+            return Response(quiz_data, status=status.HTTP_200_OK)
+        except ValueError as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response(
+                {"error": f"Beklenmeyen bir hata oluştu: {str(e)}"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
