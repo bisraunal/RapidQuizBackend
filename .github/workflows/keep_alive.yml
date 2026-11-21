@@ -1,0 +1,16 @@
+name: Keep Alive Render
+
+on:
+  schedule:
+    # Runs every 14 minutes to prevent Render free-tier cold sleep
+    - cron: '*/14 * * * *'
+  workflow_dispatch:
+
+jobs:
+  ping:
+    name: Ping Rapid Quiz Backend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Backend Health Endpoint
+        run: |
+          curl -f -s -S --max-time 60 https://rapid-quiz-backend.onrender.com/api/v1/health/ || true

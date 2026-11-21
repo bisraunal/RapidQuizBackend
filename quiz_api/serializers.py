@@ -20,6 +20,8 @@ class CategorySerializer(serializers.ModelSerializer):
         ]
 
     def get_question_count(self, obj):
+        if hasattr(obj, "active_question_count"):
+            return obj.active_question_count
         return obj.questions.filter(is_active=True).count()
 
 

@@ -12,6 +12,133 @@ from .serializers import (
 )
 
 
+FALLBACK_CATEGORIES = [
+    {
+        "id": "cat-yazilim",
+        "name": "Yazılım",
+        "slug": "yazilim",
+        "icon": "Code2",
+        "color_theme": "cyan",
+        "music_url": "https://assets.mixkit.co/music/preview/mixkit-cyber-city-110.mp3",
+        "music_title": "Cyber City - Synthwave Code Beat",
+        "is_active": True,
+        "question_count": 20,
+    },
+    {
+        "id": "cat-yapay-zeka",
+        "name": "Yapay Zeka",
+        "slug": "yapay-zeka",
+        "icon": "Bot",
+        "color_theme": "purple",
+        "music_url": "https://assets.mixkit.co/music/preview/mixkit-tech-house-vibes-130.mp3",
+        "music_title": "Neural Network - Futuristic Tech Beats",
+        "is_active": True,
+        "question_count": 20,
+    },
+    {
+        "id": "cat-teknoloji",
+        "name": "Teknoloji",
+        "slug": "teknoloji",
+        "icon": "Cpu",
+        "color_theme": "cyan",
+        "music_url": "https://assets.mixkit.co/music/preview/mixkit-electronic-technology-gaming-beat-296.mp3",
+        "music_title": "Silicon Pulse - Retro Tech Arp",
+        "is_active": True,
+        "question_count": 20,
+    },
+    {
+        "id": "cat-ulkeler",
+        "name": "Ülkeler",
+        "slug": "ulkeler",
+        "icon": "Globe",
+        "color_theme": "amber",
+        "music_url": "https://assets.mixkit.co/music/preview/mixkit-world-odyssey-120.mp3",
+        "music_title": "World Odyssey - Global Acoustic Journey",
+        "is_active": True,
+        "question_count": 20,
+    },
+    {
+        "id": "cat-fizik",
+        "name": "Fizik",
+        "slug": "fizik",
+        "icon": "Atom",
+        "color_theme": "blue",
+        "music_url": "https://assets.mixkit.co/music/preview/mixkit-cosmic-horizon-95.mp3",
+        "music_title": "Cosmic Horizon - Deep Space Ambient",
+        "is_active": True,
+        "question_count": 20,
+    },
+    {
+        "id": "cat-futbol",
+        "name": "Futbol",
+        "slug": "futbol",
+        "icon": "Trophy",
+        "color_theme": "emerald",
+        "music_url": "https://assets.mixkit.co/music/preview/mixkit-stadium-champions-140.mp3",
+        "music_title": "Stadium Champions - Energetic Rock Beat",
+        "is_active": True,
+        "question_count": 20,
+    },
+    {
+        "id": "cat-ascilik",
+        "name": "Aşçılık",
+        "slug": "ascilik",
+        "icon": "ChefHat",
+        "color_theme": "orange",
+        "music_url": "https://assets.mixkit.co/music/preview/mixkit-bistro-gourmet-105.mp3",
+        "music_title": "Bistro Gourmet - Cozy Kitchen Bossa Nova",
+        "is_active": True,
+        "question_count": 20,
+    },
+    {
+        "id": "cat-sinema",
+        "name": "Sinema",
+        "slug": "sinema",
+        "icon": "Clapperboard",
+        "color_theme": "purple",
+        "music_url": "https://assets.mixkit.co/music/preview/mixkit-cinematic-mystery-suspense-hum-2852.mp3",
+        "music_title": "Cinematic Drama - Film Score",
+        "is_active": True,
+        "question_count": 20,
+    },
+    {
+        "id": "cat-tarih",
+        "name": "Tarih",
+        "slug": "tarih",
+        "icon": "Landmark",
+        "color_theme": "amber",
+        "music_url": "https://assets.mixkit.co/music/preview/mixkit-ancient-whispers-432.mp3",
+        "music_title": "Ancient Empires - Historic Battle",
+        "is_active": True,
+        "question_count": 20,
+    },
+]
+
+
+class HealthCheckView(APIView):
+    """
+    GET /health/ and /api/v1/health/
+    Ultra-lightweight endpoint for UptimeRobot, cron-job.org, and keep-alive pingers.
+    Keeps Render warm and monitors DB health.
+    """
+    def get(self, request):
+        from django.db import connection
+        db_ok = True
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT 1")
+        except Exception:
+            db_ok = False
+
+        status_code = status.HTTP_200_OK if db_ok else status.HTTP_503_SERVICE_UNAVAILABLE
+        response = Response({
+            "status": "healthy" if db_ok else "unhealthy",
+            "database": "connected" if db_ok else "disconnected",
+        }, status=status_code)
+        response["Cache-Control"] = "no-cache, no-store, must-revalidate"
+        return response
+
+
 class ApiRootView(APIView):
     """
     GET / and /api/v1/
@@ -23,22 +150,25 @@ class ApiRootView(APIView):
             "version": "v1",
             "status": "running",
             "endpoints": {
+                "health": request.build_absolute_uri("/api/v1/health/"),
                 "categories": request.build_absolute_uri("/api/v1/categories/"),
-                "category_questions_example": request.build_absolute_uri("/api/v1/categories/ascilik/questions/"),
+                "category_questions_example": request.build_absolute_uri("/api/v1/categories/yazilim/questions/"),
                 "quiz_submit": request.build_absolute_uri("/api/v1/quiz/submit/"),
                 "generate_ai_quiz": request.build_absolute_uri("/api/v1/quiz/generate-ai/"),
-                "leaderboard": request.build_absolute_uri("/api/v1/leaderboard/?category=ascilik"),
+                "leaderboard": request.build_absolute_uri("/api/v1/leaderboard/?category=yazilim"),
                 "global_leaderboard": request.build_absolute_uri("/api/v1/leaderboard/global/"),
                 "admin_panel": request.build_absolute_uri("/admin/"),
             },
             "available_categories": [
-                {"name": "Aşçılık", "slug": "ascilik"},
                 {"name": "Yazılım", "slug": "yazilim"},
                 {"name": "Yapay Zeka", "slug": "yapay-zeka"},
-                {"name": "Bilgisayar Mühendisliği", "slug": "bilgisayar-muhendisligi"},
+                {"name": "Teknoloji", "slug": "teknoloji"},
                 {"name": "Ülkeler", "slug": "ulkeler"},
                 {"name": "Fizik", "slug": "fizik"},
                 {"name": "Futbol", "slug": "futbol"},
+                {"name": "Aşçılık", "slug": "ascilik"},
+                {"name": "Sinema", "slug": "sinema"},
+                {"name": "Tarih", "slug": "tarih"},
             ]
         }, status=status.HTTP_200_OK)
 
@@ -47,11 +177,51 @@ class CategoryListView(APIView):
     """
     GET /api/v1/categories/
     Returns list of all active categories.
+    Features:
+    - Optimized single query (no N+1 question counts)
+    - Auto-seeding if the database was wiped or is freshly deployed
+    - Resilient fallback if the database is temporarily unreachable
+    - HTTP Cache-Control header for browser & CDN edge performance
     """
     def get(self, request):
-        categories = Category.objects.filter(is_active=True)
-        serializer = CategorySerializer(categories, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        try:
+            from django.db.models import Count, Q
+            categories = list(
+                Category.objects.filter(is_active=True)
+                .exclude(slug__startswith="ai-")
+                .annotate(active_question_count=Count('questions', filter=Q(questions__is_active=True)))
+                .order_by('name')
+            )
+
+            # Auto-seed if database is empty (e.g. fresh ephemeral container on Render)
+            if not categories:
+                from django.core.management import call_command
+                try:
+                    call_command('seed_quiz_data')
+                    categories = list(
+                        Category.objects.filter(is_active=True)
+                        .exclude(slug__startswith="ai-")
+                        .annotate(active_question_count=Count('questions', filter=Q(questions__is_active=True)))
+                        .order_by('name')
+                    )
+                except Exception as seed_err:
+                    import logging
+                    logging.getLogger(__name__).warning("Auto-seed on empty DB failed: %s", seed_err)
+
+            if categories:
+                serializer = CategorySerializer(categories, many=True)
+                data = serializer.data
+            else:
+                data = FALLBACK_CATEGORIES
+
+        except Exception as exc:
+            import logging
+            logging.getLogger(__name__).error("Database error in CategoryListView: %s", exc)
+            data = FALLBACK_CATEGORIES
+
+        response = Response(data, status=status.HTTP_200_OK)
+        response["Cache-Control"] = "public, max-age=300, stale-while-revalidate=86400"
+        return response
 
 
 class CategoryQuestionsView(APIView):

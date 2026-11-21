@@ -73,10 +73,12 @@ WSGI_APPLICATION = 'rapid_quiz_core.wsgi.application'
 DEFAULT_DATABASE_URL = f"sqlite:///{BASE_DIR / 'db.sqlite3'}"
 DATABASE_URL = os.environ.get('DATABASE_URL', DEFAULT_DATABASE_URL)
 
+CONN_MAX_AGE = int(os.environ.get('CONN_MAX_AGE', '60'))
+
 DATABASES = {
     'default': dj_database_url.config(
         default=DEFAULT_DATABASE_URL,
-        conn_max_age=600,
+        conn_max_age=CONN_MAX_AGE,
         conn_health_checks=True,
     )
 }

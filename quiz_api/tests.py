@@ -133,6 +133,14 @@ class RapidQuizAPITests(TestCase):
         self.assertEqual(global_resp.status_code, status.HTTP_200_OK)
         self.assertEqual(len(global_resp.data["leaderboard"]), 2)
 
+    def test_health_check(self):
+        """Test GET /api/v1/health/"""
+        url = reverse("quiz_api:health-check")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["status"], "healthy")
+        self.assertEqual(response.data["database"], "connected")
+
     def test_generate_ai_quiz(self):
         """Test POST /api/v1/quiz/generate-ai/"""
         url = reverse("quiz_api:quiz-generate-ai")
@@ -146,4 +154,16 @@ class RapidQuizAPITests(TestCase):
             self.assertEqual(len(q["choices"]), 4)
             for c in q["choices"]:
                 self.assertNotIn("is_correct", c)
+
+    def test_category_list_empty_db_fallback(self):
+        """Test GET /api/v1/categories/ falls back gracefully if all categories deleted"""
+        Category.objects.all().delete()
+        url = reverse("quiz_api:category-list")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(len(response.data) >= 7)
+        slugs = [c["slug"] for c in response.data]
+        self.assertIn("yazilim", slugs)
+        self.assertIn("yapay-zeka", slugs)
+        self.assertIn("Cache-Control", response)
 

@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import (
     ApiRootView,
+    HealthCheckView,
     CategoryListView,
     CategoryQuestionsView,
     QuizSubmitView,
@@ -13,6 +14,7 @@ app_name = "quiz_api"
 
 urlpatterns = [
     path("", ApiRootView.as_view(), name="api-root"),
+    path("health/", HealthCheckView.as_view(), name="health-check"),
     path("categories/", CategoryListView.as_view(), name="category-list"),
     path("categories/<slug:slug>/questions/", CategoryQuestionsView.as_view(), name="category-questions"),
     path("quiz/submit/", QuizSubmitView.as_view(), name="quiz-submit"),
