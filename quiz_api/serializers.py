@@ -96,8 +96,17 @@ class AnswerSubmissionSerializer(serializers.Serializer):
     selected_choice_id = serializers.UUIDField(allow_null=True, required=False)
     time_taken = serializers.FloatField(min_value=0.0, max_value=60.0, default=10.0)
 
+    def to_internal_value(self, data):
+        if isinstance(data, dict):
+            # Normalize empty string, undefined or non-UUID falsey to None
+            val = data.get("selected_choice_id")
+            if not val or val == "" or str(val).lower() in ("null", "none"):
+                data = data.copy()
+                data["selected_choice_id"] = None
+        return super().to_internal_value(data)
+
 
 class QuizSubmissionSerializer(serializers.Serializer):
     category_slug = serializers.SlugField()
-    player_name = serializers.CharField(max_length=50, min_length=2, trim_whitespace=True)
+    player_name = serializers.CharField(max_length=50, min_length=1, required=False, default="Oyuncu", trim_whitespace=True)
     answers = AnswerSubmissionSerializer(many=True)

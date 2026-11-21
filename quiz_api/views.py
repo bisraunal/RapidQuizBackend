@@ -263,7 +263,19 @@ class QuizSubmitView(APIView):
         player_name = data["player_name"]
         answers = data["answers"]
 
-        category = get_object_or_404(Category, slug=category_slug, is_active=True)
+        category = Category.objects.filter(slug=category_slug).first()
+        if not category:
+            # Resilient recovery: If category slug not found (e.g. AI quiz after container recycle),
+            # get or create so that the user's score submission NEVER fails with 404!
+            category, _ = Category.objects.get_or_create(
+                slug=category_slug,
+                defaults={
+                    "name": category_slug.replace("-", " ").title(),
+                    "icon": "Trophy",
+                    "color_theme": "cyan",
+                    "is_active": True,
+                }
+            )
 
         # Collect question IDs and load correct choices from database
         question_ids = [ans["question_id"] for ans in answers]
